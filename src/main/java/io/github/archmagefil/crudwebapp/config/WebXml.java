@@ -1,17 +1,17 @@
-package io.github.archmagefil.crudwebapp.конфиг;
+package io.github.archmagefil.crudwebapp.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class НастройкаВебХмл extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebXml extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{КонфигБд.class};
+        return new Class[]{AppConfg.class};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[0];
-    } //{НастройкаПриложения.class}
+        return null;
+    }
 
     @Override
     protected String[] getServletMappings() {

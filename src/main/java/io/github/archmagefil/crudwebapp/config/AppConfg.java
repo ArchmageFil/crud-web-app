@@ -1,4 +1,4 @@
-package io.github.archmagefil.crudwebapp.конфиг;
+package io.github.archmagefil.crudwebapp.config;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -15,12 +15,13 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan("io.github.archmagefil.crudwebapp")
-public class НастройкаПриложения implements WebMvcConfigurer {
+public class AppConfg implements WebMvcConfigurer {
     private final ApplicationContext context;
 
-    public НастройкаПриложения(ApplicationContext context) {
+    public AppConfg(ApplicationContext context) {
         this.context = context;
     }
+
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -30,6 +31,7 @@ public class НастройкаПриложения implements WebMvcConfigurer 
         templateResolver.setCharacterEncoding("UTF-8");
         return templateResolver;
     }
+
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
@@ -37,6 +39,7 @@ public class НастройкаПриложения implements WebMvcConfigurer 
         templateEngine.setEnableSpringELCompiler(true);
         return templateEngine;
     }
+
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
