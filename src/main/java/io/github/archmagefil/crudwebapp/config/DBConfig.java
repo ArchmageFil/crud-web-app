@@ -1,10 +1,7 @@
 package io.github.archmagefil.crudwebapp.config;
 
-import io.github.archmagefil.crudwebapp.dao.DaoUser;
-import io.github.archmagefil.crudwebapp.dao.DaoUserJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -27,8 +24,8 @@ import java.util.Properties;
 @PropertySource(encoding = "UTF-8", value = "classpath:/mysql8.properties")
 @EnableTransactionManagement
 public class DBConfig {
-    @Autowired
     private Environment env;
+
     @Bean
     DataSource dataMySql() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -41,20 +38,26 @@ public class DBConfig {
     }
 
     @Bean
+    public EntityManager entityManager(LocalContainerEntityManagerFactoryBean e) {
+        return Objects.requireNonNull(e.getObject()).createEntityManager();
+    }
+
+    @Bean
     public PlatformTransactionManager transactionManager() {
         final JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFB().getObject());
         return transactionManager;
     }
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFB() {
-        LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
-        bean.setDataSource(dataMySql());
-        bean.setPackagesToScan("io.github.archmagefil.crudwebapp.model");
+        LocalContainerEntityManagerFactoryBean emfb = new LocalContainerEntityManagerFactoryBean();
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        bean.setJpaVendorAdapter(vendorAdapter);
-        bean.setJpaProperties(adapterConfig());
-        return bean;
+        emfb.setDataSource(dataMySql());
+        emfb.setJpaVendorAdapter(vendorAdapter);
+        emfb.setJpaProperties(adapterConfig());
+        emfb.setPackagesToScan("io.github.archmagefil.crudwebapp.model");
+        return emfb;
     }
 
     @Bean
@@ -69,5 +72,9 @@ public class DBConfig {
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
+    }
+    @Autowired
+    public void setEnv(Environment env) {
+        this.env = env;
     }
 }

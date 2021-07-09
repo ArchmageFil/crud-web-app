@@ -1,19 +1,22 @@
 package io.github.archmagefil.crudwebapp.dao;
 
 import io.github.archmagefil.crudwebapp.model.User;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
-@Repository
+@Component
+@Transactional
 public class DaoUserJpa implements DaoUser {
-    @PersistenceContext(unitName = "entityManagerFactory")
+    @PersistenceContext
     EntityManager em;
 
-    public DaoUserJpa(EntityManager em) {
+    public DaoUserJpa(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityManager em) {
         this.em = em;
     }
 
@@ -65,7 +68,7 @@ public class DaoUserJpa implements DaoUser {
         Query query = em.createQuery("SELECT u FROM User u WHERE u.name = :name AND u.surname = :surname", User.class);
         query.setParameter("name", name);
         query.setParameter("surname", surname);
-        return  (List<User>) query.getResultList();
+        return (List<User>) query.getResultList();
     }
 
     @Override

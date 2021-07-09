@@ -19,9 +19,10 @@ public class User {
     public static class createUser {
         User user;
 
-        public createUser(){
+        public createUser() {
             user = new User();
         }
+
         public createUser name(String name) {
             user.name = name;
             return this;
@@ -41,7 +42,8 @@ public class User {
             user.age = age;
             return this;
         }
-        public User build(){
+
+        public User build() {
             return user;
         }
     }

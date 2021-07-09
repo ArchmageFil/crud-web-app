@@ -5,12 +5,12 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class WebXml extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{AppConfg.class};
+        return null;
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return null;
+        return new Class[]{AppConfg.class};
     }
 
     @Override
