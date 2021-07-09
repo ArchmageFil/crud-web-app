@@ -21,77 +21,58 @@ public class DaoUserJpa implements DaoUser {
     }
 
     @Override
-    public void addUser(User user) {
+    public void add(User user) {
         em.getTransaction().begin();
         em.persist(user);
         em.getTransaction().commit();
     }
 
     @Override
-    public void updateUser(User user) {
+    public void update(User user) {
         em.getTransaction().begin();
         em.merge(user);
         em.getTransaction().commit();
     }
 
     @Override
-    public void deleteUser(long id) {
+    public void delete(long id) {
         em.getTransaction().begin();
         em.remove(em.getReference(User.class, id));
         em.getTransaction().commit();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<User> getAllUsers() {
-        Query query = em.createQuery("SELECT u FROM User u ORDER BY u.id", User.class);
-        return query.getResultList();
+    public List<User> getAll() {
+        return em.createQuery("SELECT u FROM User u ORDER BY u.id",
+                User.class).getResultList();
     }
 
     @Override
-    public List<User> findUser(long id) {
+    public List<User> find(long id) {
         User u = em.find(User.class, id);
         return Collections.singletonList(u);
     }
 
     @Override
-    public List<User> findUser(String email) {
-        Query query = em.createQuery("SELECT u from User u WHERE u.email = :email", User.class);
+    public List<User> find(String email) {
+        Query query = em.createQuery("SELECT u from User u " +
+                "WHERE u.email = :email", User.class);
         query.setParameter("email", email);
         User u = (User) query.getSingleResult();
         return Collections.singletonList(u);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<User> findUser(String name, String surname) {
-        Query query = em.createQuery("SELECT u FROM User u WHERE u.name = :name AND u.surname = :surname", User.class);
-        query.setParameter("name", name);
-        query.setParameter("surname", surname);
-        return (List<User>) query.getResultList();
-    }
-
-    @Override
-    public String createDB() {
-//        Query query = em.createNativeQuery("");
-//        int i = query.executeUpdate();
-//        return "Завершено" + i;
-        return null;
+    public List<User> find(String name, String surname) {
+        return em.createQuery("SELECT u FROM User u WHERE u.name = :name " +
+                "AND u.surname = :surname", User.class)
+                .setParameter("name", name)
+                .setParameter("surname", surname).getResultList();
     }
 
     @Override
     public String clearDB() {
-//        Query запрос = em.createNativeQuery("");
-//        int i = запрос.executeUpdate();
-//        return "Завершено" + i;
-        return null;
-    }
-
-    @Override
-    public String dropDB() {
-//        Query запрос = em.createNativeQuery("");
-//        int i = запрос.executeUpdate();
-//        return "Завершено" + i;
-        return null;
+        int i = em.createQuery("DELETE FROM User").executeUpdate();
+        return "Завершено" + i;
     }
 }

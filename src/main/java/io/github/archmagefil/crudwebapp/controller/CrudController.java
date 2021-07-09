@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CrudController {
     @GetMapping("/usereditor")
-    public String userEditor(Model model){
+    public String userEditor(Model model) {
         return "usereditor";
     }
+
     @GetMapping("/")
-    public String hello(){
+    public String hello() {
         return "index";
     }
 }
