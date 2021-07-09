@@ -73,6 +73,7 @@ public class DBConfig {
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
+
     @Autowired
     public void setEnv(Environment env) {
         this.env = env;
