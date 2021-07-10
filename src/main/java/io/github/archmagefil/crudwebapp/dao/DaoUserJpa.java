@@ -11,9 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-@Transactional
 public class DaoUserJpa implements DaoUser {
-    @PersistenceContext
     private final EntityManager em;
 
     public DaoUserJpa(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityManager em) {
@@ -22,23 +20,25 @@ public class DaoUserJpa implements DaoUser {
 
     @Override
     public void add(User user) {
+        System.out.println(user);
         em.getTransaction().begin();
         em.persist(user);
+        em.flush();
         em.getTransaction().commit();
+        System.out.println(user);
     }
 
     @Override
     public void update(User user) {
         em.getTransaction().begin();
         em.merge(user);
+        em.flush();
         em.getTransaction().commit();
     }
 
     @Override
     public void delete(long id) {
-        em.getTransaction().begin();
         em.remove(em.getReference(User.class, id));
-        em.getTransaction().commit();
     }
 
     @Override

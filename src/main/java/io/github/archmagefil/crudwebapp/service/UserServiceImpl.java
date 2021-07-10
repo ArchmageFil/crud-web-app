@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService {
         if (!dao.find(user.getEmail()).isEmpty()) {
             return "Пользователь с таким почтовым адресом уже есть.";
         }
+        System.out.println(user);
         dao.add(user);
         return "Пользователь " + user.getName() + " " + user.getSurname()
                 + " добавлен";

@@ -1,20 +1,73 @@
 <!DOCTYPE html>
 <!--suppress HtmlUnknownTag -->
+
 <html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Редактор Пользователей</title>
+    <link rel="stylesheet" type="text/css" href="crud.css">
+    <script>
+        window.onscroll = function () {
+            var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+            document.getElementById('element_B').style.position = scrolled > 100 ? 'fixed' : 'inherit';
+        }
+    </script>
 </head>
 <body>
-<!--/*@thymesVar id="hat" type="java.lang.String"*/-->
-<h2 th:utext="${hat}"></h2>
-
-<div>
-    <!--/*@thymesVar id="userList" type="java.util.List"*/-->
-    <th:block th:each="user : ${userList}">
-        <!--/*@thymesVar id="user" type="io.github.archmagefil.crudwebapp.model.User"*/-->
-        <h3 th:text="${user}"></h3>
-    </th:block>
+<div class="element_A">
+    <!--/*@thymesVar id="hat" type="java.lang.String"*/-->
+    <h2 th:utext="${hat}">User Editor</h2>
+    <h3 th:text="${result}"></h3>
+</div>
+<div id='element_B' class='element_B'>
+    <!--/*@thymesVar id="user" type="io.github.archmagefil.crudwebapp.model.User"*/-->
+    <form class="add-form" th:method="POST" th:action="@{/crud}" th:object="${user}" >
+        <div class="add-line">
+            <label>Имя:&nbsp;</label>
+            <p><input type="text" th:field="*{name}"/>
+        </div>
+        <div class="add-line">
+            <label>Фамилия</label>
+            <p><input type="text" th:field="*{surname}"/>
+        </div>
+        <div class="add-line">
+            <label>Возраст</label>
+            <p><input type="text" th:field="*{age}"/>
+        </div>
+        <div class="add-line">
+            <label>Эл. почта</label>
+            <p><input type="text" th:field="*{email}"/>
+        </div>
+        <div class="add-line">
+            <button class="add-button" type="submit">Создать Пользователя</button>
+        </div>
+    </form>
+</div>
+<div class="element_C">
+    <h3>Список пользователей</h3>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ИД</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Возраст</th>
+            <th>Эл. почта</th>
+            <th colspan="2">Операции</th>
+        </tr>
+        </thead>
+        <tbody th:each="cur_user : ${userList}">
+        <tr>
+            <td th:text="${cur_user.id}"></td>
+            <td th:text="${cur_user.name}"></td>
+            <td th:text="${cur_user.surname}"></td>
+            <td th:text="${cur_user.age}"></td>
+            <td th:text="${cur_user.email}"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
