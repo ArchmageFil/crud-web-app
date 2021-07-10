@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional
 public class DaoUserJpa implements DaoUser {
     @PersistenceContext
-    EntityManager em;
+    private final EntityManager em;
 
     public DaoUserJpa(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityManager em) {
         this.em = em;
@@ -50,6 +50,9 @@ public class DaoUserJpa implements DaoUser {
     @Override
     public List<User> find(long id) {
         User u = em.find(User.class, id);
+        if (u == null) {
+            return Collections.emptyList();
+        }
         return Collections.singletonList(u);
     }
 
@@ -58,7 +61,12 @@ public class DaoUserJpa implements DaoUser {
         Query query = em.createQuery("SELECT u from User u " +
                 "WHERE u.email = :email", User.class);
         query.setParameter("email", email);
-        User u = (User) query.getSingleResult();
+        User u;
+        try {
+            u = (User) query.getSingleResult();
+        } catch (javax.persistence.NoResultException e) {
+            return Collections.emptyList();
+        }
         return Collections.singletonList(u);
     }
 

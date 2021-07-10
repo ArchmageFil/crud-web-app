@@ -1,19 +1,53 @@
 package io.github.archmagefil.crudwebapp.controller;
 
+import io.github.archmagefil.crudwebapp.model.UserRaw;
+import io.github.archmagefil.crudwebapp.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+//@RequestMapping("/bd_crud")
 public class CrudController {
-    @GetMapping("/usereditor")
-    public String userEditor(Model model) {
-        return "usereditor";
+    private final static String PAGE = "bd_crud/index";
+    private final static String RESULT = "result";
+    private final static String USR_LST = "userList";
+    private final UserService userService;
+
+
+    @Autowired
+    public CrudController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/")
-    public String hello() {
+    @GetMapping("/bd_crud")
+    public String listUsers(Model model) {
+        model.addAttribute(USR_LST, userService.getAllUsers());
+        return PAGE;
+    }
+    @PostMapping("/bd_crud")
+    public String addUser(@RequestParam UserRaw user, Model model){
+        model.addAttribute(RESULT, userService.addUser(user));
+        model.addAttribute(USR_LST, userService.getAllUsers());
+        return PAGE;
+    }
+
+    @PatchMapping("/bd_crud")
+    public String updateUser(@RequestParam UserRaw user, Model model) {
+        model.addAttribute(RESULT, userService.updateUser(user));
+        model.addAttribute(USR_LST, userService.getAllUsers());
+        return PAGE;
+    }
+
+    @DeleteMapping("/bd_crud")
+    public String deleteUser(@RequestParam long id, Model model) {
+        model.addAttribute(RESULT, userService.deleteUser(id));
+        model.addAttribute(USR_LST, userService.getAllUsers());
+        return PAGE;
+    }
+    @RequestMapping("/")
+    public String helloWorld(){
         return "index";
     }
 }
-//TODO реализовать

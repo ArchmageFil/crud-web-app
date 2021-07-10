@@ -1,18 +1,31 @@
 package io.github.archmagefil.crudwebapp.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
     String name;
     String surname;
-    int age;
+    Integer age;
     @Column(unique = true, nullable = false)
     String email;
+
+    public static User of(UserRaw ur) {
+        User u = new User();
+        u.name = ur.name;
+        u.surname = ur.surname;
+        u.email = ur.email;
+        u.age = ur.age;
+        u.id = ur.id;
+        return u;
+    }
 }
