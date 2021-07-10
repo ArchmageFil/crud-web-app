@@ -6,9 +6,10 @@
     <title>Редактор Пользователей</title>
 </head>
 <body>
+<h2 th:text="${hat}"></h2>
 <div>
     <th:block th:each="user : ${userList}">
-        <h1 th:text="${user}"></h1>
+        <h3 th:text="${user}"></h3>
     </th:block>
 </div>
 </body>
