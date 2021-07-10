@@ -2,11 +2,11 @@ package io.github.archmagefil.crudwebapp.service;
 
 import io.github.archmagefil.crudwebapp.dao.DaoUser;
 import io.github.archmagefil.crudwebapp.model.User;
-import io.github.archmagefil.crudwebapp.model.UserRaw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     private static final String WRONG_EMAIL = "Неправильный синтаксис электронной почты";
@@ -21,39 +21,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String addUser(UserRaw user) {
-        if (user.isInvalidEmail()){
+    public String addUser(User user) {
+        if (user.isInvalidEmail()) {
             return WRONG_EMAIL;
         }
-        if (user.isInvalidAge()){
+        if (user.isInvalidAge()) {
             return WRONG_AGE;
         }
-        if (!dao.find(user.getEmail()).isEmpty()){
+        if (!dao.find(user.getEmail()).isEmpty()) {
             return "Пользователь с таким почтовым адресом уже есть.";
         }
-        dao.add(User.of(user));
+        dao.add(user);
         return "Пользователь " + user.getName() + " " + user.getSurname()
                 + " добавлен";
     }
 
     @Override
-    public String updateUser(UserRaw user) {
-        if (user.isInvalidEmail()){
+    public String updateUser(User user) {
+        if (user.isInvalidEmail()) {
             return WRONG_EMAIL;
         }
-        if (user.isInvalidAge()){
+        if (user.isInvalidAge()) {
             return WRONG_AGE;
         }
-        if (user.getId() == null || dao.find(user.getId()).isEmpty()){
+        if (user.getId() == null || dao.find(user.getId()).isEmpty()) {
             return NO_ID_IN_DB;
         }
-        dao.update(User.of(user));
+        dao.update(user);
         return "Обновлено";
     }
 
     @Override
     public String deleteUser(long id) {
-        if (dao.find(id).isEmpty()){
+        if (dao.find(id).isEmpty()) {
             return NO_ID_IN_DB;
         }
         dao.delete(id);

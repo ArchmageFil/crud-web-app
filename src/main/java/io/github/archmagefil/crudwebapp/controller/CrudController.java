@@ -1,6 +1,6 @@
 package io.github.archmagefil.crudwebapp.controller;
 
-import io.github.archmagefil.crudwebapp.model.UserRaw;
+import io.github.archmagefil.crudwebapp.model.User;
 import io.github.archmagefil.crudwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,28 +22,35 @@ public class CrudController {
 
     @GetMapping("/crud")
     public String listUsers(Model model) {
-        model.addAttribute(USR_LST, userService.getAllUsers());
+        userList(model);
         return PAGE;
     }
 
     @PostMapping("/crud")
-    public String addUser(@RequestParam UserRaw user, Model model) {
+    public String addUser(@RequestParam User user, Model model) {
         model.addAttribute(RESULT, userService.addUser(user));
-        model.addAttribute(USR_LST, userService.getAllUsers());
+        userList(model);
         return PAGE;
     }
 
     @PatchMapping("/crud")
-    public String updateUser(@RequestParam UserRaw user, Model model) {
+    public String updateUser(@RequestParam User user, @RequestParam long id,
+                             Model model) {
         model.addAttribute(RESULT, userService.updateUser(user));
-        model.addAttribute(USR_LST, userService.getAllUsers());
+        userList(model);
         return PAGE;
     }
 
     @DeleteMapping("/crud")
     public String deleteUser(@RequestParam long id, Model model) {
         model.addAttribute(RESULT, userService.deleteUser(id));
-        model.addAttribute(USR_LST, userService.getAllUsers());
+        userList(model);
         return PAGE;
+    }
+
+    //TODO Статика выполняется первой и даст не актуальный список, поискать можно ли как то обойти?
+    private void userList(Model model) {
+        model.addAttribute(USR_LST, userService.getAllUsers());
+
     }
 }
