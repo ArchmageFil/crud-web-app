@@ -1,43 +1,34 @@
 package io.github.archmagefil.crudwebapp.dao;
 
 import io.github.archmagefil.crudwebapp.model.User;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
-@Component
+@Repository
+@Transactional
 public class DaoUserJpa implements DaoUser {
-    private final EntityManager em;
-
-    public DaoUserJpa(@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") EntityManager em) {
-        this.em = em;
-    }
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public void add(User user) {
-        em.getTransaction().begin();
         em.persist(user);
-        em.flush();
-        em.getTransaction().commit();
     }
 
     @Override
     public void update(User user) {
-        em.getTransaction().begin();
         em.merge(user);
-        em.flush();
-        em.getTransaction().commit();
     }
 
     @Override
     public void delete(long id) {
-        em.getTransaction().begin();
         em.remove(em.getReference(User.class, id));
-        em.flush();
-        em.getTransaction().commit();
     }
 
     @Override

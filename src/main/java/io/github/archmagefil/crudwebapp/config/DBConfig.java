@@ -14,12 +14,11 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Objects;
 import java.util.Properties;
 
-@SuppressWarnings("SpellCheckingInspection")
 @Configuration
 @PropertySource(encoding = "UTF-8", value = "classpath:/mysql8.properties")
 @EnableTransactionManagement
@@ -38,26 +37,22 @@ public class DBConfig {
     }
 
     @Bean
-    public EntityManager entityManager(LocalContainerEntityManagerFactoryBean e) {
-        return Objects.requireNonNull(e.getObject()).createEntityManager();
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager() {
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         final JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFB().getObject());
+        transactionManager.setEntityManagerFactory(emf);
         return transactionManager;
     }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFB() {
-        LocalContainerEntityManagerFactoryBean emfb = new LocalContainerEntityManagerFactoryBean();
+        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        emfb.setDataSource(dataMySql());
-        emfb.setJpaVendorAdapter(vendorAdapter);
-        emfb.setJpaProperties(adapterConfig());
-        emfb.setPackagesToScan("io.github.archmagefil.crudwebapp.model");
-        return emfb;
+        emf.setDataSource(dataMySql());
+        emf.setJpaVendorAdapter(vendorAdapter);
+        emf.setJpaProperties(adapterConfig());
+        //noinspection SpellCheckingInspection
+        emf.setPackagesToScan("io.github.archmagefil.crudwebapp.model");
+        return emf;
     }
 
     @Bean
