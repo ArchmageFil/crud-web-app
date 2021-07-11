@@ -14,4 +14,8 @@ public interface UserService {
     String deleteUser(long id);
 
     User find(long id);
+
+    String generateDb();
+
+    String clearDB();
 }

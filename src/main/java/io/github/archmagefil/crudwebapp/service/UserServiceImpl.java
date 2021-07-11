@@ -3,8 +3,12 @@ package io.github.archmagefil.crudwebapp.service;
 import io.github.archmagefil.crudwebapp.dao.DaoUser;
 import io.github.archmagefil.crudwebapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 @Service
@@ -63,6 +67,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public User find(long id) {
         return dao.find(id);
+    }
+
+    @Override
+    public String generateDb() {
+        try {
+            BufferedReader reader = Files.newBufferedReader(
+                    new ClassPathResource("mock_data.sql").getFile().toPath());
+            return "Внесено: " + reader.lines()
+                    .mapToInt(l -> {
+                        int i = 0;
+                        try {
+                            i = dao.executeNative(l);
+                        } catch (Exception e) {
+                            //...
+                        }
+                        return i;
+                    }).sum();
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+    }
+
+    @Override
+    public String clearDB() {
+        return dao.clearDB();
     }
 
 

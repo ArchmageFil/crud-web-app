@@ -1,19 +1,20 @@
 package io.github.archmagefil.crudwebapp.controller;
 
-import io.github.archmagefil.crudwebapp.dao.DaoUser;
+import io.github.archmagefil.crudwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LandingController {
-    private final DaoUser daoUser;
+    private final UserService service;
 
     @Autowired
-    public LandingController(DaoUser daoUser) {
-        this.daoUser = daoUser;
+    public LandingController(UserService service) {
+        this.service = service;
     }
 
     @GetMapping("/")
@@ -21,9 +22,15 @@ public class LandingController {
         return "index.html";
     }
 
-    @PostMapping("/")
+    @DeleteMapping("/")
     public String clear(Model model) {
-        model.addAttribute("result", daoUser.clearDB());
+        model.addAttribute("result", service.clearDB());
+        return "index.html";
+    }
+
+    @PostMapping("/")
+    public String generateDb(Model model) {
+        model.addAttribute("result", service.generateDb());
         return "index.html";
     }
 

@@ -69,4 +69,9 @@ public class DaoUserJpa implements DaoUser {
         int i = em.createQuery("DELETE FROM User").executeUpdate();
         return "Завершено" + i;
     }
+
+    @Override
+    public int executeNative(String nq) {
+        return em.createNativeQuery(nq).executeUpdate();
+    }
 }

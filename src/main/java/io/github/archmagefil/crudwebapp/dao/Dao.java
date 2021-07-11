@@ -16,4 +16,5 @@ public interface Dao<T> {
 
     T find(long id);
 
+    int executeNative(String nq);
 }

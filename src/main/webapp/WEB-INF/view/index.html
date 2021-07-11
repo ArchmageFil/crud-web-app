@@ -16,8 +16,12 @@
 </form>
 <p>
 <form class="add-form" method="post" action="/">
-    <input class="add-button" type="submit" value="Очистить БД">
-    <h3 th:text="${result}"></h3>
+    <button class="add-button" type="submit">Сгенерировать БД</button>
 </form>
+<p>
+<form class="add-form" th:method="DELETE" method="post" action="/">
+    <button class="add-button" type="submit">Очистить БД</button>
+</form>
+<h3 th:text="${result}"></h3>
 </body>
 </html>
