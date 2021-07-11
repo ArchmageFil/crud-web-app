@@ -12,19 +12,23 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 //@RequestMapping("/crud")
 public class CrudController {
-    private final static String PAGE = "crud/index";
+    private final static String PAGE = "crud/index.html";
     private final static String RESULT = "result";
     private final static String USR_LST = "userList";
+    private final static String REDIRECT = "redirect:/crud?r=true";
+    private final static String EDIT_PAGE = "crud/edit.html";
     private final UserService userService;
     private String result;
+
     @Autowired
     public CrudController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/crud")
-    public String listUsers(@RequestParam(value = "r", defaultValue = "false")Boolean r, Model model) {
-        if (r){
+    public String listUsers(@RequestParam(value = "r", defaultValue = "false")
+                                    Boolean r, Model model) {
+        if (r) {
             model.addAttribute(RESULT, result);
         }
         model.addAttribute(USR_LST, userService.getAllUsers());
@@ -34,21 +38,29 @@ public class CrudController {
     @PostMapping("/crud")
     public String addUser(@ModelAttribute User user) {
         result = userService.addUser(user);
-        return "redirect:/crud?r=true";
+        return REDIRECT;
+    }
+
+    @PatchMapping("/crud/{id}")
+    public String editUser(@PathVariable long id, Model model) {
+        User user = userService.find(id);
+        if (user == null) {
+            result = "Пользователь не найден в БД";
+            return REDIRECT;
+        }
+        model.addAttribute("user", user);
+        return EDIT_PAGE;
     }
 
     @PatchMapping("/crud")
-    public String updateUser(@RequestParam User user, Model model) {
-        model.addAttribute(RESULT, userService.updateUser(user));
-        model.addAttribute(USR_LST, userService.getAllUsers());
-        return PAGE;
+    public String updateUser(@ModelAttribute User user) {
+        result = userService.updateUser(user);
+        return REDIRECT;
     }
 
-    @DeleteMapping("/crud")
-    public String deleteUser(@RequestParam long id, Model model) {
-        model.addAttribute(RESULT, userService.deleteUser(id));
-        model.addAttribute(USR_LST, userService.getAllUsers());
-        return PAGE;
+    @DeleteMapping("/crud/{id}")
+    public String deleteUser(@PathVariable long id) {
+        result = userService.deleteUser(id);
+        return REDIRECT;
     }
-    //TODO Статика выполняется первой и даст не актуальный список, поискать можно ли как то обойти?
 }

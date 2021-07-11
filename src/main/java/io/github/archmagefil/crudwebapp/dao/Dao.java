@@ -14,6 +14,6 @@ public interface Dao<T> {
 
     List<T> getAll();
 
-    List<T> find(long id);
+    T find(long id);
 
 }

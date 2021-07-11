@@ -4,9 +4,7 @@ import io.github.archmagefil.crudwebapp.model.User;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,12 +18,10 @@ public class DaoUserJpa implements DaoUser {
 
     @Override
     public void add(User user) {
-        System.out.println(user);
         em.getTransaction().begin();
         em.persist(user);
         em.flush();
         em.getTransaction().commit();
-        System.out.println(user);
     }
 
     @Override
@@ -38,7 +34,10 @@ public class DaoUserJpa implements DaoUser {
 
     @Override
     public void delete(long id) {
+        em.getTransaction().begin();
         em.remove(em.getReference(User.class, id));
+        em.flush();
+        em.getTransaction().commit();
     }
 
     @Override
@@ -48,12 +47,8 @@ public class DaoUserJpa implements DaoUser {
     }
 
     @Override
-    public List<User> find(long id) {
-        User u = em.find(User.class, id);
-        if (u == null) {
-            return Collections.emptyList();
-        }
-        return Collections.singletonList(u);
+    public User find(long id) {
+        return em.find(User.class, id);
     }
 
     @Override

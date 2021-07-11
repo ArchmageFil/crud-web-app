@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class StaticController {
     @ModelAttribute
     public void addHat(Model model) {
-        model.addAttribute("hat", "Редактор пользователей");
         model.addAttribute("user", new User());
+        //TODO поискать способ, чтобы выполнялось после контроллера, а не до.
     }
 
 

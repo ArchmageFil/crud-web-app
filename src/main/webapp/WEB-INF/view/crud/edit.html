@@ -1,23 +1,37 @@
 <!DOCTYPE html>
-<!--suppress HtmlUnknownTag -->
 <html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Редактор Пользователей - Приветствие</title>
+    <title>Редактор Пользователя</title>
     <link rel="stylesheet" type="text/css" href="/crud.css">
     <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb+f/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABv5/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb+f/AAAAAABv5/8Ab+f/AG/n/wBv5/8AAAAAAAAAAABv5/8AAAAAAAAAAABv5/8Ab+f/AG/n/wBv5/8AAAAAAG/n/wAAAAAAb+f/AAAAAAAAAAAAb+f/AAAAAABv5/8Ab+cBAG/n/wAAAAAAb+f/AAAAAAAAAAAAb+f/AAAAAABv5/8AAAAAAG/n/wBv5/8Ab+f/AG/n/wAAAAAAb+f/AAAAAABv5/8AAAAAAAAAAABv5/8Ab+f/AG/n/wAAAAAAb+f/AAAAAAAAAAAAAAAAAAAAAABv5/8AAAAAAG/n/wAAAAAAb+f/AAAAAAAAAAAAAAAAAAAAAABv5/8AAAAAAG/n/wAAAAAAb+f/AG/n/wBv5/8Ab+caAG/n9gBv5/sAAAAAAG/n5wBv58EAb+f/AG/n/wBv5/8Ab+f/AAAAAABv5/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb+f/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAAf/8AAL//AAChsAAArVYAAKFYAAC9XgAAokAAAL//AAC//wAA//8AAP//AAD//wAA//8AAA=="
           rel="icon" type="image/x-icon"/>
 </head>
 <body>
-<p>
-<h2>Привет, хозяин.</h2>
-<form class="add-form" method="get" action="/crud">
-    <input class="add-button" type="submit" value="Редактировать БД">
-</form>
-<p>
-<form class="add-form" method="post" action="/">
-    <input class="add-button" type="submit" value="Очистить БД">
-    <h3 th:text="${result}"></h3>
+<form class="edit-form" th:method="PATCH" th:action="@{/crud}" th:object="${user}">
+    <div class="add-line">
+        <label for="id">Идентификатор:</label>
+        <p><input type="number" th:field="*{id}" id="id" readonly/>
+    </div>
+    <div class="add-line">
+        <label for="name">Имя:&nbsp;</label>
+        <p><input type="text" th:field="*{name}" id="name"/>
+    </div>
+    <div class="add-line">
+        <label for="surname">Фамилия</label>
+        <p><input type="text" th:field="*{surname}" id="surname"/>
+    </div>
+    <div class="add-line">
+        <label for="age">Возраст</label>
+        <p><input type="number" th:field="*{age}" id="age"/>
+    </div>
+    <div class="add-line">
+        <label for="email">Эл. почта</label>
+        <p><input type="email" th:field="*{email}" id="email"/>
+    </div>
+    <div class="add-line">
+        <button class="add-button" type="submit">Изменить</button>
+    </div>
 </form>
 </body>
 </html>

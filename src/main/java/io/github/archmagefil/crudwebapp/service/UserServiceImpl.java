@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
         if (!dao.find(user.getEmail()).isEmpty()) {
             return "Пользователь с таким почтовым адресом уже есть.";
         }
-        System.out.println(user);
         dao.add(user);
         return "Пользователь " + user.getName() + " " + user.getSurname()
                 + " добавлен";
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService {
         if (user.isInvalidAge()) {
             return WRONG_AGE;
         }
-        if (user.getId() == null || dao.find(user.getId()).isEmpty()) {
+        if (user.getId() == null || dao.find(user.getId()) == null) {
             return NO_ID_IN_DB;
         }
         dao.update(user);
@@ -54,11 +53,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String deleteUser(long id) {
-        if (dao.find(id).isEmpty()) {
+        if (dao.find(id) == null) {
             return NO_ID_IN_DB;
         }
         dao.delete(id);
         return "Удален";
+    }
+
+    @Override
+    public User find(long id) {
+        return dao.find(id);
     }
 
 
