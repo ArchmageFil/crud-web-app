@@ -19,6 +19,7 @@ public class CrudController {
     private final static String EDIT_PAGE = "crud/edit.html";
     private final UserService userService;
     private String result;
+    private Long id;
 
     @Autowired
     public CrudController(UserService userService) {
@@ -48,13 +49,20 @@ public class CrudController {
             result = "Пользователь не найден в БД";
             return REDIRECT;
         }
+        this.id = id;
         model.addAttribute("user", user);
         return EDIT_PAGE;
     }
 
     @PatchMapping("/crud")
     public String updateUser(@ModelAttribute User user) {
-        result = userService.updateUser(user);
+        if (this.id != null) {
+            user.setId(this.id);
+            this.id = null;
+            result = userService.updateUser(user);
+            return REDIRECT;
+        }
+        result = "Ошибка запроса, попробуй еще раз.";
         return REDIRECT;
     }
 

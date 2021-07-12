@@ -50,7 +50,6 @@ public class DBConfig {
         emf.setDataSource(dataMySql());
         emf.setJpaVendorAdapter(vendorAdapter);
         emf.setJpaProperties(adapterConfig());
-        //noinspection SpellCheckingInspection
         emf.setPackagesToScan("io.github.archmagefil.crudwebapp.model");
         return emf;
     }
