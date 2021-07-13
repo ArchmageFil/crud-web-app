@@ -23,6 +23,7 @@ public class DaoUserJpa implements DaoUser {
 
     @Override
     public void update(User user) {
+        System.out.println(user);
         em.merge(user);
     }
 

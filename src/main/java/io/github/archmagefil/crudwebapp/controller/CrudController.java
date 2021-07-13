@@ -54,12 +54,13 @@ public class CrudController {
         return EDIT_PAGE;
     }
 
-    @PatchMapping("/crud")
+    @PatchMapping(value = "/crud")
     public String updateUser(@ModelAttribute User user) {
         if (this.id != null) {
             user.setId(this.id);
             this.id = null;
             result = userService.updateUser(user);
+            System.out.println(user);
             return REDIRECT;
         }
         result = "Ошибка запроса, попробуй еще раз.";

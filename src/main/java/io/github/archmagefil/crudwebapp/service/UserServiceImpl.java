@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
         if (user.getId() == null || dao.find(user.getId()) == null) {
             return NO_ID_IN_DB;
         }
+        System.out.println(user);
         dao.update(user);
         return "Обновлено";
     }
