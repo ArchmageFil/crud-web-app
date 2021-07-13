@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static io.github.archmagefil.crudwebapp.util.UserTableUtil.*;
-
 @Service
 public class UserServiceImpl implements UserService {
     private DaoUser dao;
@@ -28,30 +26,31 @@ public class UserServiceImpl implements UserService {
             return util.getMessage();
         }
         if (!dao.find(user.getEmail()).isEmpty()) {
-            return DUPLICATE_EMAIL;
+            return util.getWords().getProperty("duplicate_email");
         }
         dao.add(user);
-        return USER + user.getName() + " " + user.getSurname() + ADDED;
+        return util.getWords().getProperty("user") + user.getName() + " " + user.getSurname() + util.getWords().getProperty(
+                "added");
     }
 
     @Override
     @Transactional
     public String updateUser(User user) {
         if (null == find(user.getId())) {
-            return NO_ID_IN_DB;
+            return util.getWords().getProperty("no_id_in_db");
         }
         dao.update(user);
-        return UPDATED;
+        return util.getWords().getProperty("updated");
     }
 
     @Override
     @Transactional
     public String deleteUser(long id) {
         if (find(id) == null) {
-            return NO_ID_IN_DB;
+            return util.getWords().getProperty("no_id_in_db");
         }
         dao.delete(id);
-        return DELETED;
+        return util.getWords().getProperty("deleted");
     }
 
     @Override
