@@ -12,6 +12,4 @@ public class StaticController {
         model.addAttribute("user", new User());
         //TODO поискать способ, чтобы выполнялось после контроллера, а не до.
     }
-
-
 }

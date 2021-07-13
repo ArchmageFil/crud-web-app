@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Редактор Пользователей</title>
-    <link rel="stylesheet" type="text/css" href="crud.css">
-    <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb+f/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABv5/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb+f/AAAAAABv5/8Ab+f/AG/n/wBv5/8AAAAAAAAAAABv5/8AAAAAAAAAAABv5/8Ab+f/AG/n/wBv5/8AAAAAAG/n/wAAAAAAb+f/AAAAAAAAAAAAb+f/AAAAAABv5/8Ab+cBAG/n/wAAAAAAb+f/AAAAAAAAAAAAb+f/AAAAAABv5/8AAAAAAG/n/wBv5/8Ab+f/AG/n/wAAAAAAb+f/AAAAAABv5/8AAAAAAAAAAABv5/8Ab+f/AG/n/wAAAAAAb+f/AAAAAAAAAAAAAAAAAAAAAABv5/8AAAAAAG/n/wAAAAAAb+f/AAAAAAAAAAAAAAAAAAAAAABv5/8AAAAAAG/n/wAAAAAAb+f/AG/n/wBv5/8Ab+caAG/n9gBv5/sAAAAAAG/n5wBv58EAb+f/AG/n/wBv5/8Ab+f/AAAAAABv5/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb+f/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP//AAD//wAAf/8AAL//AAChsAAArVYAAKFYAAC9XgAAokAAAL//AAC//wAA//8AAP//AAD//wAA//8AAA=="
-          rel="icon" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="/resources/crud.css">
     <script>
         window.onscroll = function () {
             let scrolled = window.pageYOffset || document.documentElement.scrollTop;
@@ -20,7 +18,7 @@
 </div>
 <div id='element_B' class='element_B'>
     <!--/*@thymesVar id="user" type="io.github.archmagefil.crudwebapp.model.User"*/-->
-    <form class="add-form" th:method="POST" th:action="@{/crud}" th:object="${user}">
+    <form class="add-form" th:method="POST" th:action="@{/crud/}" th:object="${user}">
         <div class="add-line">
             <label>Имя:&nbsp;</label>
             <p><input type="text" th:field="*{name}"/>
@@ -63,7 +61,7 @@
             <td th:text="${cur_user.age}"></td>
             <td th:text="${cur_user.email}"></td>
             <td>
-                <form action="#" th:method="PATCH" th:action="@{/crud/{id}(id = ${cur_user.id})}">
+                <form action="#" th:method="GET" th:action="@{/crud/edit/{id}(id = ${cur_user.id})}">
                     <button type="submit">Редактировать</button>
                 </form>
             </td>

@@ -6,12 +6,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
 @Repository
-@Transactional
 public class DaoUserJpa implements DaoUser {
     @PersistenceContext
     private EntityManager em;
@@ -54,14 +52,6 @@ public class DaoUserJpa implements DaoUser {
             return Collections.emptyList();
         }
         return Collections.singletonList(u);
-    }
-
-    @Override
-    public List<User> find(String name, String surname) {
-        return em.createQuery("SELECT u FROM User u WHERE u.name = :name " +
-                "AND u.surname = :surname", User.class)
-                .setParameter("name", name)
-                .setParameter("surname", surname).getResultList();
     }
 
     @Override
