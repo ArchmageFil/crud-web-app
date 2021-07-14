@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
             return util.getWords().getProperty("duplicate_email");
         }
         dao.add(user);
-        return util.getWords().getProperty("user") + user.getName() + " " + user.getSurname() + util.getWords().getProperty(
-                "added");
+        return String.format(util.getWords().getProperty("user_added"),
+                user.getName(), user.getSurname());
     }
 
     @Override
@@ -57,6 +57,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User find(long id) {
         return dao.find(id);
+    }
+
+    @Override
+    public User find(String email) {
+        return dao.find(email);
     }
 
     @Transactional

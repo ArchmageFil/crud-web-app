@@ -45,8 +45,7 @@ public class LandingController {
     }
     @GetMapping("/user")
     public String userPage(Principal principal, UserService service, Model model){
-        //model.addAttribute("user", service.
-        // TODO добавять текущего пользователя по принципаалу в модель.
+        model.addAttribute("user", service.find(principal.getName()));
         return "user.html";
     }
 

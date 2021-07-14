@@ -1,6 +1,7 @@
 package io.github.archmagefil.crudwebapp.service;
 
 import io.github.archmagefil.crudwebapp.dao.DaoUser;
+import io.github.archmagefil.crudwebapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,11 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return dao.find(username);
+        User user = dao.find(username);
+        if (user == null){
+            throw new UsernameNotFoundException(String.format(
+                    "Пользователь с логином %s не найден в БД", username));
+        }
+        return user;
     }
 }

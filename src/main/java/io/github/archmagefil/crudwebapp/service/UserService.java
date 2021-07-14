@@ -15,6 +15,8 @@ public interface UserService {
 
     User find(long id);
 
+    User find(String email);
+
     String generateDb();
 
     String clearDB();
