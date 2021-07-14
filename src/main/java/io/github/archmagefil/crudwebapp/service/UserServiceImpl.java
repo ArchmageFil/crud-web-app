@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
         if (util.isInvalidUser(user)) {
             return util.getMessage();
         }
-        if (!dao.find(user.getEmail()).isEmpty()) {
+        if (dao.find(user.getEmail()) != null) {
             return util.getWords().getProperty("duplicate_email");
         }
         dao.add(user);

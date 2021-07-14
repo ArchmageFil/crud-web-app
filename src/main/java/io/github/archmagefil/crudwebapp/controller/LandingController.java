@@ -3,6 +3,7 @@ package io.github.archmagefil.crudwebapp.controller;
 import io.github.archmagefil.crudwebapp.service.UserService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Principal;
 
 @Controller
 public class LandingController {
@@ -27,7 +29,7 @@ public class LandingController {
     }
 
     /**
-     * Страничка по умолчанию, приветствие ссылки
+     * @return Страничка по умолчанию, приветствие, ссылки
      */
     @GetMapping("/")
     public String landing() {
@@ -35,25 +37,21 @@ public class LandingController {
     }
 
     /**
-     * Очистка БД
+     * @return Страница с формой авторизациии.
      */
-    @DeleteMapping("/")
-    public String clear(Model model) {
-        model.addAttribute("result", service.clearDB());
-        return "index.html";
+    @GetMapping("/login")
+    public String loginPage(){
+        return "login.html";
+    }
+    @GetMapping("/user")
+    public String userPage(Principal principal, UserService service, Model model){
+        //model.addAttribute("user", service.
+        // TODO добавять текущего пользователя по принципаалу в модель.
+        return "user.html";
     }
 
     /**
-     * Генерация случайных пользователей
-     */
-    @PostMapping("/")
-    public String generateDb(Model model) {
-        model.addAttribute("result", service.generateDb());
-        return "index.html";
-    }
-
-    /**
-     * Табличка стилей
+     * @return Табличка стилей.
      */
     @GetMapping(value = "resources/crud.css", headers = "Accept=text/css")
     public String css() {
@@ -67,8 +65,8 @@ public class LandingController {
     @ResponseBody
     public void favicon(HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
-        InputStream is = Files.newInputStream(Paths.get(
-                "E:/IDE/idea_proj/crud_web_app/target/crud_web_app/WEB-INF/view/resources/favicon.png"));
+        InputStream is =Files.newInputStream(new ClassPathResource(
+                "../view/resources/favicon.png").getFile().toPath());
         IOUtils.copy(is, response.getOutputStream());
     }
 }

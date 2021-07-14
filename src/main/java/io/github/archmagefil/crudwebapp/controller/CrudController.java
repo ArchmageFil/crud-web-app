@@ -1,6 +1,7 @@
 package io.github.archmagefil.crudwebapp.controller;
 
 import io.github.archmagefil.crudwebapp.model.User;
+import io.github.archmagefil.crudwebapp.model.VisitorMessages;
 import io.github.archmagefil.crudwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,68 +9,106 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.security.Principal;
+
 @Controller
 @SessionScope
-//@RequestMapping("/crud")
+@RequestMapping("/crud/")
 public class CrudController {
-    private final static String PAGE = "crud/index.html";
-    private final static String RESULT = "result";
-    private final static String USR_LST = "userList";
-    private final static String REDIRECT = "redirect:/crud?r=true";
-    private final static String EDIT_PAGE = "crud/edit.html";
     private final UserService userService;
-    private String result;
-    private Long id;
+    private VisitorMessages messages;
 
     @Autowired
     public CrudController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/crud")
+    /**
+     * Основной список пользователей с формой нового пользоваателя
+     */
+    @GetMapping("/")
     public String listUsers(@RequestParam(value = "r", defaultValue = "false")
-                                    Boolean r, Model model) {
-        if (r) {
-            model.addAttribute(RESULT, result);
+                                    Boolean isRedirect, Model model, Principal principal) {
+        model.addAttribute("user_login", principal.getName());
+        model.addAttribute("user", new User());
+        // Если в запросе пришла инфа о наличии доп. сообщениий - добавить в модель
+        if (isRedirect) {
+            model.addAttribute("result", messages.getResult());
         }
-        model.addAttribute(USR_LST, userService.getAllUsers());
-        return PAGE;
+        model.addAttribute("userList", userService.getAllUsers());
+        return "/crud/index.html";
     }
 
-    @PostMapping("/crud")
+    /**
+     * Добавление нового пользователя
+     */
+    @PostMapping("/")
     public String addUser(@ModelAttribute User user) {
-        result = userService.addUser(user);
-        return REDIRECT;
+        // кидаем в сообщения результат операции
+        messages.setResult(userService.addUser(user));
+        return "redirect:/crud/?r=true";
     }
 
-    @PatchMapping("/crud/{id}")
+    /**
+     * Запрос странички с редактированием пользователя
+     */
+    @GetMapping("/edit/{id}")
     public String editUser(@PathVariable long id, Model model) {
         User user = userService.find(id);
+        // Такого не должно быть, т.к. вызов по кнопке, но если сервис
+        // не нашел пользователя то возвращаемся на общую страничку
         if (user == null) {
-            result = "Пользователь не найден в БД";
-            return REDIRECT;
+            messages.setResult("Пользователь не найден в БД");
+            return "redirect:crud/?r=true";
         }
-        this.id = id;
+        // Кидаем в сообщения результат операции ии возвращаемся на основную страницу
+        messages.setId(id);
         model.addAttribute("user", user);
-        return EDIT_PAGE;
+        return "/crud/edit.html";
     }
 
-    @PatchMapping(value = "/crud")
+    /**
+     * Обработка формы на редактирование пользователя.
+     */
+    @PatchMapping("/")
     public String updateUser(@ModelAttribute User user) {
-        if (this.id != null) {
-            user.setId(this.id);
-            this.id = null;
-            result = userService.updateUser(user);
-            System.out.println(user);
-            return REDIRECT;
+        // Ставим ранее сохраненный ИД
+        user.setId(messages.getId());
+        if (user.getId() == null) {
+            messages.setResult("Ошибка запроса, попробуй еще раз.");
+            return "redirect:/crud/?r=true";
         }
-        result = "Ошибка запроса, попробуй еще раз.";
-        return REDIRECT;
+        // Кидаем в сообщения результат операции ии возвращаемся на основную страницу
+        messages.setResult(userService.updateUser(user));
+        return "redirect:/crud/?r=true";
     }
 
-    @DeleteMapping("/crud/{id}")
+    /**
+     * Обработка запроса на удаление из БД пользователя по ИД
+     */
+    @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable long id) {
-        result = userService.deleteUser(id);
-        return REDIRECT;
+        messages.setResult(userService.deleteUser(id));
+        return "redirect:/crud/?r=true";
+    }
+    /**
+     * Генерация случайных пользователей
+     */
+    @GetMapping("/db_gen/")
+    public String generateDb(UserService service) {
+        messages.setResult(service.generateDb());
+        return "redirect:/crud/?r=true";
+    }
+    /**
+     * Очистка БД
+     */
+    @DeleteMapping("/db_gen/")
+    public String clear(UserService service) {
+        messages.setResult(service.clearDB());
+        return "redirect:/crud/?r=true";
+    }
+    @Autowired
+    public void setMessages(VisitorMessages messages) {
+        this.messages = messages;
     }
 }

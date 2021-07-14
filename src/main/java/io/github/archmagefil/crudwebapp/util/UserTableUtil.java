@@ -37,10 +37,6 @@ public class UserTableUtil {
             message = words.getProperty("wrong_email");
             return true;
         }
-        if (isInvalidAge(user.getAge())) {
-            message = words.getProperty("wrong_age");
-            return true;
-        }
         return false;
     }
 
@@ -50,10 +46,6 @@ public class UserTableUtil {
         }
         Matcher syntax = p.matcher(email);
         return !syntax.matches();
-    }
-
-    public boolean isInvalidAge(Integer age) {
-        return age != null && (age <= 0 || age >= 200);
     }
 
     @Transactional

@@ -42,17 +42,11 @@ public class DaoUserJpa implements DaoUser {
     }
 
     @Override
-    public List<User> find(String email) {
+    public User find(String email) {
         Query query = em.createQuery("SELECT u from User u " +
                 "WHERE u.email = :email", User.class);
         query.setParameter("email", email);
-        User u;
-        try {
-            u = (User) query.getSingleResult();
-        } catch (javax.persistence.NoResultException e) {
-            return Collections.emptyList();
-        }
-        return Collections.singletonList(u);
+        return (User) query.getSingleResult();
     }
 
     @Override

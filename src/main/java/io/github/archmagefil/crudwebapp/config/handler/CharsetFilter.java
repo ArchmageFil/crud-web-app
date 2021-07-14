@@ -1,4 +1,4 @@
-package io.github.archmagefil.crudwebapp.config;
+package io.github.archmagefil.crudwebapp.config.handler;
 
 import org.springframework.stereotype.Component;
 
