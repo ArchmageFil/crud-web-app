@@ -2,22 +2,17 @@ package io.github.archmagefil.crudwebapp.service;
 
 import io.github.archmagefil.crudwebapp.dao.DaoUser;
 import io.github.archmagefil.crudwebapp.model.User;
+import io.github.archmagefil.crudwebapp.util.UserTableUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private static final String WRONG_EMAIL = "Неправильный синтаксис электронной почты";
-    private static final String WRONG_AGE = "Возраст должен быть корректным или не быть вообще";
-    private static final String NO_ID_IN_DB = "Пользователя с таким ИД нет в базе данных";
     private DaoUser dao;
-
+    private UserTableUtil util;
 
     @Override
     public List<User> getAllUsers() {
@@ -25,44 +20,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String addUser(User user) {
-        if (user.isInvalidEmail()) {
-            return WRONG_EMAIL;
-        }
-        if (user.isInvalidAge()) {
-            return WRONG_AGE;
+        if (util.isInvalidUser(user)) {
+            return util.getMessage();
         }
         if (!dao.find(user.getEmail()).isEmpty()) {
-            return "Пользователь с таким почтовым адресом уже есть.";
+            return util.getWords().getProperty("duplicate_email");
         }
         dao.add(user);
-        return "Пользователь " + user.getName() + " " + user.getSurname()
-                + " добавлен";
+        return util.getWords().getProperty("user") + user.getName() + " " + user.getSurname() + util.getWords().getProperty(
+                "added");
     }
 
     @Override
+    @Transactional
     public String updateUser(User user) {
-        if (user.isInvalidEmail()) {
-            return WRONG_EMAIL;
-        }
-        if (user.isInvalidAge()) {
-            return WRONG_AGE;
-        }
-        if (user.getId() == null || dao.find(user.getId()) == null) {
-            return NO_ID_IN_DB;
+        if (null == find(user.getId())) {
+            return util.getWords().getProperty("no_id_in_db");
         }
         System.out.println(user);
         dao.update(user);
-        return "Обновлено";
+        return util.getWords().getProperty("updated");
     }
 
     @Override
+    @Transactional
     public String deleteUser(long id) {
-        if (dao.find(id) == null) {
-            return NO_ID_IN_DB;
+        if (find(id) == null) {
+            return util.getWords().getProperty("no_id_in_db");
         }
         dao.delete(id);
-        return "Удален";
+        return util.getWords().getProperty("deleted");
     }
 
     @Override
@@ -70,34 +59,24 @@ public class UserServiceImpl implements UserService {
         return dao.find(id);
     }
 
-    @Override
-    public String generateDb() {
-        try {
-            BufferedReader reader = Files.newBufferedReader(
-                    new ClassPathResource("mock_data.sql").getFile().toPath());
-            return "Внесено: " + reader.lines()
-                    .mapToInt(l -> {
-                        int i = 0;
-                        try {
-                            i = dao.executeNative(l);
-                        } catch (Exception e) {
-                            //...
-                        }
-                        return i;
-                    }).sum();
-        } catch (IOException e) {
-            return e.getMessage();
-        }
-    }
-
+    @Transactional
     @Override
     public String clearDB() {
         return dao.clearDB();
     }
 
+    @Override
+    public String generateDb() {
+        return util.generateFakeUsers(dao);
+    }
 
     @Autowired
     public void setDao(DaoUser dao) {
         this.dao = dao;
+    }
+
+    @Autowired
+    public void setUtil(UserTableUtil util) {
+        this.util = util;
     }
 }
