@@ -84,3 +84,7 @@ a:hover {
     margin-top: 15px;
     margin-bottom: 15px;
 }
+.red-text{
+    color: red;
+    font-size: large;
+}

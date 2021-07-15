@@ -6,10 +6,10 @@
     <link rel="stylesheet" type="text/css" href="resources/newcss.css">
 </head>
 <body>
-<h1>Профиль пользователя</h1>
+<h1 th:text="|Профиль пользователя ${user.email}|">Профиль пользователя</h1>
 
 
-<div th:object="${User}">
+<div th:object="${user}">
     <p>
         Имя: <span th:text="*{name}">Аноним</span>.
     </p>
@@ -17,15 +17,18 @@
         Фамилия: <span th:text="*{surname}">Аанонимов</span>.
     </p>
     <p>
-        Действительность: <span th:text="'аккаунт ' + (*{isGoodAcc} ? 'Действует' : 'Недействителен')">Н/д</span>.
+        Блокировка: <span th:text="(*{isEnabled()} ? 'Действует' : 'Недействителен')">Н/д</span>.
     </p>
     <p>
         Права: <span th:each="role : *{roles}" th:text="' ' + ${role.role}">Н/д</span>
     </p>
+    <p></p>
+    <p></p>
 </div>
 
 <p>
     <a href="index.html" th:href="@{/}">Вернуться на главную</a>
 </p>
+
 </body>
 </html>
