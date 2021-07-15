@@ -17,7 +17,5 @@ public interface UserService {
 
     User find(String email);
 
-    String generateDb();
-
     String clearDB();
 }

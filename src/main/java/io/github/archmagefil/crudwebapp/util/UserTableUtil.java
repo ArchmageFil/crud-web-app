@@ -1,16 +1,17 @@
 package io.github.archmagefil.crudwebapp.util;
 
+import io.github.archmagefil.crudwebapp.dao.DaoRole;
 import io.github.archmagefil.crudwebapp.dao.DaoUser;
+import io.github.archmagefil.crudwebapp.model.Role;
 import io.github.archmagefil.crudwebapp.model.User;
 import lombok.Getter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,26 +47,6 @@ public class UserTableUtil {
         }
         Matcher syntax = p.matcher(email);
         return !syntax.matches();
-    }
-
-    @Transactional
-    public String generateFakeUsers(DaoUser daoUser) {
-        try (BufferedReader reader = Files.newBufferedReader(
-                new ClassPathResource("mock_data.sql").getFile().toPath())) {
-            return "Внесено: " + reader.lines()
-                    .mapToInt(l -> {
-                        int i = 0;
-                        try {
-                            i = daoUser.executeNative(l);
-                        } catch (Exception ignore) {
-                            //...
-                        }
-                        return i;
-                    }).sum();
-        } catch (IOException e) {
-            return e.getMessage();
-        }
-
     }
 }
 

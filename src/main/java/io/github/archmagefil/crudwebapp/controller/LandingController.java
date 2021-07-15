@@ -7,10 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,6 +40,11 @@ public class LandingController {
     public String loginPage(){
         return "login.html";
     }
+    @GetMapping("/login?error")
+    public String loginErrorPage(Model model){
+        model.addAttribute("bad_credentials", "true");
+        return "login.html";
+    }
     @GetMapping("/user")
     public String userPage(Principal principal, UserService service, Model model){
         model.addAttribute("user", service.find(principal.getName()));
@@ -56,6 +58,15 @@ public class LandingController {
     public String css() {
         return "resources/crud.css";
     }
+
+    /**
+     * @return Табличка стилей.
+     */
+    @GetMapping(value = "resources/newcss.css", headers = "Accept=text/css")
+    public String cssNew() {
+        return "resources/newcss.css";
+    }
+
 
     /**
      * favicon.ico просто раздражало постоянное 404

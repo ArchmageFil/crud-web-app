@@ -19,8 +19,6 @@ public interface DaoUser {
     User find(long id);
 
     String clearDB();
-
-    int executeNative(String nq);
 }
 //1. Перенесите классы и зависимости из примера в свое MVC приложение из предыдущей задачи.
 

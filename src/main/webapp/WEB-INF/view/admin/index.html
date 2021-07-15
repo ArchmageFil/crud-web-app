@@ -17,7 +17,7 @@
     <h3 th:text="${result}"></h3>
 </div>
 <div id='element_B' class='element_B'>
-    <!--/*@thymesVar id="user" type="io.github.archmagefil.crudwebapp.model.User"*/-->
+
     <form class="add-form" th:method="POST" th:action="@{/crud/}" th:object="${user}">
         <div class="add-line">
             <label>Имя:&nbsp;</label>

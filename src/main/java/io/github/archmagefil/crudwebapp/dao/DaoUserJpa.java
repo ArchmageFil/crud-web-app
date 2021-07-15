@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,7 +22,6 @@ public class DaoUserJpa implements DaoUser {
 
     @Override
     public void update(User user) {
-        System.out.println(user);
         em.merge(user);
     }
 
@@ -53,10 +53,5 @@ public class DaoUserJpa implements DaoUser {
     public String clearDB() {
         int i = em.createQuery("DELETE FROM User").executeUpdate();
         return "Завершено" + i;
-    }
-
-    @Override
-    public int executeNative(String nq) {
-        return em.createNativeQuery(nq).executeUpdate();
     }
 }

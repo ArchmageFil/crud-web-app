@@ -13,7 +13,7 @@ import java.security.Principal;
 
 @Controller
 @SessionScope
-@RequestMapping("/crud/")
+@RequestMapping("/admin/")
 public class CrudController {
     private final UserService userService;
     private VisitorMessages messages;
@@ -29,6 +29,8 @@ public class CrudController {
     @GetMapping("/")
     public String listUsers(@RequestParam(value = "r", defaultValue = "false")
                                     Boolean isRedirect, Model model, Principal principal) {
+
+
         model.addAttribute("user_login", principal.getName());
         model.addAttribute("user", new User());
         // Если в запросе пришла инфа о наличии доп. сообщениий - добавить в модель
@@ -36,7 +38,7 @@ public class CrudController {
             model.addAttribute("result", messages.getResult());
         }
         model.addAttribute("userList", userService.getAllUsers());
-        return "/crud/index.html";
+        return "/admin/index.html";
     }
 
     /**
@@ -46,7 +48,7 @@ public class CrudController {
     public String addUser(@ModelAttribute User user) {
         // кидаем в сообщения результат операции
         messages.setResult(userService.addUser(user));
-        return "redirect:/crud/?r=true";
+        return "redirect:/admin/?r=true";
     }
 
     /**
@@ -59,12 +61,12 @@ public class CrudController {
         // не нашел пользователя то возвращаемся на общую страничку
         if (user == null) {
             messages.setResult("Пользователь не найден в БД");
-            return "redirect:crud/?r=true";
+            return "redirect:admin/?r=true";
         }
         // Кидаем в сообщения результат операции ии возвращаемся на основную страницу
         messages.setId(id);
         model.addAttribute("user", user);
-        return "/crud/edit.html";
+        return "/admin/edit.html";
     }
 
     /**
@@ -76,11 +78,11 @@ public class CrudController {
         user.setId(messages.getId());
         if (user.getId() == null) {
             messages.setResult("Ошибка запроса, попробуй еще раз.");
-            return "redirect:/crud/?r=true";
+            return "redirect:/admin/?r=true";
         }
         // Кидаем в сообщения результат операции ии возвращаемся на основную страницу
         messages.setResult(userService.updateUser(user));
-        return "redirect:/crud/?r=true";
+        return "redirect:/admin/?r=true";
     }
 
     /**
@@ -89,15 +91,7 @@ public class CrudController {
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable long id) {
         messages.setResult(userService.deleteUser(id));
-        return "redirect:/crud/?r=true";
-    }
-    /**
-     * Генерация случайных пользователей
-     */
-    @GetMapping("/db_gen/")
-    public String generateDb(UserService service) {
-        messages.setResult(service.generateDb());
-        return "redirect:/crud/?r=true";
+        return "redirect:/admin/?r=true";
     }
     /**
      * Очистка БД
@@ -105,7 +99,7 @@ public class CrudController {
     @DeleteMapping("/db_gen/")
     public String clear(UserService service) {
         messages.setResult(service.clearDB());
-        return "redirect:/crud/?r=true";
+        return "redirect:/admin/?r=true";
     }
     @Autowired
     public void setMessages(VisitorMessages messages) {
