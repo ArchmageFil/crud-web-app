@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Редактор Пользователя</title>
     <link rel="stylesheet" type="text/css" href="/resources/newcss.css">
 </head>
 <body class="body-form">
-
+<div sec:authorize="isAuthenticated()">
+    <h4> <a th:href="@{/logout}" th:text="логаут">выйти из сумрака</a></h4>
+</div>
 <form class="edit-form" action="#" th:method="PATCH" th:action="@{/admin/}" th:object="${user}">
 
     <fieldset>

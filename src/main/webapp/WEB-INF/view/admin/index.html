@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Редактор Пользователей</title>
@@ -12,6 +13,9 @@
     </script>
 </head>
 <body>
+<div sec:authorize="isAuthenticated()">
+    <h4> <a th:href="@{/logout}" th:text="логаут">выйти из сумрака</a></h4>
+</div>
 <div class="element_A">
     <h2>Редактор Пользователей</h2>
     <h3 th:text="${result}"></h3>
@@ -87,5 +91,8 @@
         </tbody>
     </table>
 </div>
+<p>
+    <a href="index.html" th:href="@{/}">Вернуться на главную</a>
+</p>
 </body>
 </html>
