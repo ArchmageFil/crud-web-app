@@ -36,10 +36,10 @@ public class UserServiceImpl implements UserService {
         tempUser.setPassword(bCrypt.encode(tempUser.getPassword()));
         // Если админ - все разрешения, если нет - только заявленное.
         // Но так как есть только еще 1, то упростим
-        if (tempUser.getRole().toLowerCase().contains("role_admin")) {
+        if (tempUser.getRole().getRole().equals("ROLE_admin")) {
             tempUser.setRoles(roleService.getAllRoles());
         } else {
-            tempUser.getRoles().add(roleService.getAllRoles().get(1));
+            tempUser.getRoles().add(roleService.getById(1L));
         }
 
         User user = tempUser.createUser();

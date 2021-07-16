@@ -19,4 +19,8 @@ public class RoleService {
     public List<Role> getAllRoles() {
         return daoRole.getAll();
     }
+
+    public Role getById(long id) {
+        return daoRole.find(id);
+    }
 }

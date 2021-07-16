@@ -33,7 +33,10 @@ public class CrudController {
     public List<Role> roleList() {
         return roleService.getAllRoles();
     }
-
+    @ModelAttribute("user_Role_test")
+    public Role role(){
+        return roleService.getById(1L);
+    }
     /**
      * Основной список пользователей с формой нового пользоваателя
      */

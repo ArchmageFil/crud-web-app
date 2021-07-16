@@ -19,7 +19,7 @@ public class UserDto {
     String email;
     String password;
     Boolean goodAcc = true;
-    String role;
+    Role role;
     List<Role> roles = new ArrayList<>();
 
     public User createUser() {

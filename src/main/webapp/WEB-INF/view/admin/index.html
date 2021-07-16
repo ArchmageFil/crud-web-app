@@ -42,9 +42,10 @@
         <div class="add-line">
             <label>Роль</label>
             <select th:field="*{role}">
+<!--                <option th:text="${user_Role_test}" th:value="${user_Role_test}"></option>-->
                 <option th:each="r : ${roles}"
                         th:text="${r.role}"
-                        th:value="${r}">wireframe
+                        th:value="${r.role}">wireframe
                 </option>
             </select>
 
