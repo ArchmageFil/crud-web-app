@@ -57,9 +57,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public String deleteUser(long id) {
-        if (find(id) == null) {
+        User user = find(id);
+        if ( user == null) {
             return util.getWords().getProperty("no_id_in_db");
         }
+        user.setRoles(null);
         dao.delete(id);
         return util.getWords().getProperty("deleted");
     }
