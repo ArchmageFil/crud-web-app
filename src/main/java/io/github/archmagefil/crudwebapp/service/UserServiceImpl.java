@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         if (dao.find(user.getEmail()) != null) {
             return util.getWords().getProperty("duplicate_email");
         }
-//        user.setPassword(bCrypt.encode(user.getPassword()));
+        user.setPassword(bCrypt.encode(user.getPassword()));
         if (roleString.contains("ROLE_admin")) {
             user.getRoles().addAll(roleService.getAllRoles());
         } else {
