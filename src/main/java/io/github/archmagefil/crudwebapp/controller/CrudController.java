@@ -2,6 +2,7 @@ package io.github.archmagefil.crudwebapp.controller;
 
 import io.github.archmagefil.crudwebapp.model.Role;
 import io.github.archmagefil.crudwebapp.model.User;
+import io.github.archmagefil.crudwebapp.model.UserDto;
 import io.github.archmagefil.crudwebapp.model.VisitorMessages;
 import io.github.archmagefil.crudwebapp.service.RoleService;
 import io.github.archmagefil.crudwebapp.service.UserService;
@@ -11,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -39,9 +39,8 @@ public class CrudController {
      */
     @GetMapping("/")
     public String listUsers(@RequestParam(value = "r", defaultValue = "false")
-                                    Boolean isRedirect, Model model, Principal principal) {
-        model.addAttribute("user_login", principal.getName());
-        model.addAttribute("user", new User());
+                                    Boolean isRedirect, Model model) {
+        model.addAttribute("userDto", new UserDto());
         // Если в запросе пришла инфа о наличии доп. сообщениий - добавить в модель
         if (isRedirect) {
             model.addAttribute("result", messages.getResult());
@@ -51,18 +50,13 @@ public class CrudController {
     }
 
     /**
-     * Добавление нового пользователя
+     * Создаание нового пользователя
+     * @param tempUser ДТОшка для подготовки к созданию сущности
+     * @return возвращает на основную админку.
      */
     @PostMapping("/")
-    public String addUser(HttpServletRequest request) {
-        User u = new User();
-        u.setName(request.getParameter("name"));
-        u.setSurname(request.getParameter("surname"));
-        u.setEmail(request.getParameter("email"));
-        u.setPassword(request.getParameter("password"));
-        u.setGoodAcc(true);
-        String roleString = request.getParameter("roles");
-        messages.setResult(userService.addUser(u, roleString));
+    public String addUser(@ModelAttribute UserDto tempUser) {
+        messages.setResult(userService.addUser(tempUser));
         return "redirect:/admin/?r=true";
     }
 

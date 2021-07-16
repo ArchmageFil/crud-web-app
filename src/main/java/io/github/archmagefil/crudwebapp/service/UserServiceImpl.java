@@ -2,6 +2,7 @@ package io.github.archmagefil.crudwebapp.service;
 
 import io.github.archmagefil.crudwebapp.dao.DaoUser;
 import io.github.archmagefil.crudwebapp.model.User;
+import io.github.archmagefil.crudwebapp.model.UserDto;
 import io.github.archmagefil.crudwebapp.util.UserTableUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,23 +25,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String addUser(User user, String roleString) {
-        if (util.isInvalidUser(user)) {
+    public String addUser(UserDto tempUser) {
+        if (util.isInvalidUser(tempUser)) {
             return util.getMessage();
         }
-        if (dao.find(user.getEmail()) != null) {
+        if (dao.find(tempUser.getEmail()) != null) {
             return util.getWords().getProperty("duplicate_email");
         }
         // Криптуем пароль нового юзера.
-        user.setPassword(bCrypt.encode(user.getPassword()));
-        // В контроллере выкидывает deattached.
-        if (roleString.contains("ROLE_admin")) {
-            user.getRoles().addAll(roleService.getAllRoles());
+        tempUser.setPassword(bCrypt.encode(tempUser.getPassword()));
+        // Если админ - все разрешения, если нет - только заявленное.
+        // Но так как есть только еще 1, то упростим
+        if (tempUser.getRole().toLowerCase().contains("role_admin")) {
+            tempUser.setRoles(roleService.getAllRoles());
         } else {
-            user.getRoles().add(roleService.getAllRoles().get(1));
+            tempUser.getRoles().add(roleService.getAllRoles().get(1));
         }
-        dao.add(user);
 
+        User user = tempUser.createUser();
+        dao.add(user);
         return String.format(util.getWords().getProperty("user_added"),
                 user.getName(), user.getSurname());
     }

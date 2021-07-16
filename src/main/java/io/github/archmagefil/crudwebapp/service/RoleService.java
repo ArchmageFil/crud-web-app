@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class RoleService {
-    DaoRole daoRole;
+    private final DaoRole daoRole;
 
     @Autowired
     public RoleService(DaoRole daoRole) {

@@ -1,6 +1,6 @@
 package io.github.archmagefil.crudwebapp.util;
 
-import io.github.archmagefil.crudwebapp.model.User;
+import io.github.archmagefil.crudwebapp.model.UserDto;
 import lombok.Getter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -29,8 +29,8 @@ public class UserTableUtil {
         }
     }
 
-    public boolean isInvalidUser(User user) {
-        if (isInvalidEmail(user.getEmail())) {
+    public boolean isInvalidUser(UserDto user) {
+        if (isInvalidEmail(user.getEmail()) || user.getPassword() == null) {
             message = words.getProperty("wrong_email");
             return true;
         }

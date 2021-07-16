@@ -22,12 +22,10 @@
 </div>
 <div class='element_B' id='element_B'>
 
-    <form class="add-form" th:action="@{/admin/}" th:method="POST" th:object="${user}">
+    <form class="add-form" th:action="@{/admin/}" th:method="POST" th:object="${userDto}">
         <div class="add-line">
             <label>Имя:&nbsp;</label>
             <p><input th:field="*{name}" type="text"/>
-                <input hidden th:field="*{id}" th:value="null" type="number">
-                <input hidden th:field="*{goodAcc}" type="checkbox"/>
         </div>
         <div class="add-line">
             <label>Фамилия</label>
@@ -43,10 +41,10 @@
         </div>
         <div class="add-line">
             <label>Роль</label>
-            <select th:field="*{roles}">
-                <option th:each="role : ${roles}"
-                        th:text="${role.role}"
-                        th:value="${role}">wireframe
+            <select th:field="*{role}">
+                <option th:each="r : ${roles}"
+                        th:text="${r.role}"
+                        th:value="${r}">wireframe
                 </option>
             </select>
 
