@@ -3,33 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Редактор Пользователя</title>
-    <link rel="stylesheet" type="text/css" href="/resources/crud.css">
+    <link rel="stylesheet" type="text/css" href="/resources/newcss.css">
 </head>
-<body>
-<form class="edit-form" th:method="PATCH" th:action="@{/crud/}" th:object="${user}">
-    <div class="add-line">
-        <label for="id">Идентификатор:</label>
-        <p><input type="number" th:field="*{id}" id="id" readonly/>
-    </div>
-    <div class="add-line">
-        <label for="name">Имя:&nbsp;</label>
-        <p><input type="text" th:field="*{name}" id="name"/>
-    </div>
-    <div class="add-line">
-        <label for="surname">Фамилия</label>
-        <p><input type="text" th:field="*{surname}" id="surname"/>
-    </div>
-    <div class="add-line">
-        <label for="age">Возраст</label>
-        <p><input type="number" th:field="*{age}" id="age"/>
-    </div>
-    <div class="add-line">
-        <label for="email">Эл. почта</label>
-        <p><input type="email" th:field="*{email}" id="email"/>
-    </div>
-    <div class="add-line">
-        <button class="add-button" type="submit">Изменить</button>
-    </div>
+<body class="body-form">
+
+<form class="edit-form" action="#" th:method="PATCH" th:action="@{/admin/}" th:object="${user}">
+
+    <fieldset>
+        <legend>Редактирование пользователя</legend>
+        <div class="add-line">
+            <label th:for="id" th:text="'Идентифиикатор: '">Идентификатор: </label>
+            <input type="number" th:field="*{id}" readonly>
+        </div><div class="add-line">
+            <label th:for="id" th:text="'Имя: '">Имя: </label>
+            <input type="text" th:field="*{name}">
+        </div><div class="add-line">
+            <label th:for="id" th:text="'Фамилия: '">Фамилия: </label>
+            <input type="text" th:field="*{surname}">
+        </div><div class="add-line">
+            <label th:for="id" th:text="'Почта: '">Почта: </label>
+            <input type="text" th:field="*{email}">
+        </div><div class="add-line">
+            <label th:for="goodAcc" th:text="'Активный: '">Действуующий: </label>
+            <input type="checkbox" th:field="*{goodAcc}"/>
+        </div><div class="button-submit, add-line">
+            <button type="submit" name="patch" th:text="'Изменить'">Изменить</button>
+        </div>
+    </fieldset>
 </form>
+<p>
+    <a href="home.html" th:href="@{/}">На главную</a>
+</p>
 </body>
 </html>

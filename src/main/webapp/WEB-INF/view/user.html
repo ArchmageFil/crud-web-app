@@ -17,7 +17,7 @@
         Фамилия: <span th:text="*{surname}">Аанонимов</span>.
     </p>
     <p>
-        Блокировка: <span th:text="(*{isEnabled()} ? 'Действует' : 'Недействителен')">Н/д</span>.
+        Блокировка: <span th:text="(*{goodAcc} ? 'Действует' : 'Недействителен')">Н/д</span>.
     </p>
     <p>
         Права: <span th:each="role : *{roles}" th:text="' ' + ${role.role}">Н/д</span>

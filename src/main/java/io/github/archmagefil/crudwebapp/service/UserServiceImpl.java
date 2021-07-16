@@ -1,24 +1,19 @@
 package io.github.archmagefil.crudwebapp.service;
 
-import io.github.archmagefil.crudwebapp.dao.DaoRole;
 import io.github.archmagefil.crudwebapp.dao.DaoUser;
-import io.github.archmagefil.crudwebapp.model.Role;
 import io.github.archmagefil.crudwebapp.model.User;
 import io.github.archmagefil.crudwebapp.util.UserTableUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
     private DaoUser dao;
-    private DaoRole daoRole;
+    private RoleService roleService;
     private UserTableUtil util;
     private PasswordEncoder bCrypt;
 
@@ -29,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String addUser(User user) {
+    public String addUser(User user, String roleString) {
         if (util.isInvalidUser(user)) {
             return util.getMessage();
         }
@@ -37,7 +32,13 @@ public class UserServiceImpl implements UserService {
             return util.getWords().getProperty("duplicate_email");
         }
 //        user.setPassword(bCrypt.encode(user.getPassword()));
+        if (roleString.contains("ROLE_admin")) {
+            user.getRoles().addAll(roleService.getAllRoles());
+        } else {
+            user.getRoles().add(roleService.getAllRoles().get(1));
+        }
         dao.add(user);
+
         return String.format(util.getWords().getProperty("user_added"),
                 user.getName(), user.getSurname());
     }
@@ -85,8 +86,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Autowired
-    public void setDaoRole(DaoRole daoRole) {
-        this.daoRole = daoRole;
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
     }
 
 
@@ -94,6 +95,7 @@ public class UserServiceImpl implements UserService {
     public void setUtil(UserTableUtil util) {
         this.util = util;
     }
+
     @Autowired
     public void setbCrypt(PasswordEncoder bCrypt) {
         this.bCrypt = bCrypt;

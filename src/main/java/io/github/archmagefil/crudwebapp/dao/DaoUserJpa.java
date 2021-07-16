@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -46,7 +44,11 @@ public class DaoUserJpa implements DaoUser {
         Query query = em.createQuery("SELECT u from User u " +
                 "WHERE u.email = :email", User.class);
         query.setParameter("email", email);
-        return (User) query.getSingleResult();
+        try {
+            return (User) query.getSingleResult();
+        } catch (javax.persistence.NoResultException e) {
+            return null;
+        }
     }
 
     @Override

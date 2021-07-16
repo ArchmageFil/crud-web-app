@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserService {
     List<User> getAllUsers();
 
-    String addUser(User user);
+    String addUser(User user, String roleString);
 
     String updateUser(User user);
 

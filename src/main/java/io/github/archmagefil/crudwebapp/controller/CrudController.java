@@ -1,7 +1,9 @@
 package io.github.archmagefil.crudwebapp.controller;
 
+import io.github.archmagefil.crudwebapp.model.Role;
 import io.github.archmagefil.crudwebapp.model.User;
 import io.github.archmagefil.crudwebapp.model.VisitorMessages;
+import io.github.archmagefil.crudwebapp.service.RoleService;
 import io.github.archmagefil.crudwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,18 +11,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @SessionScope
 @RequestMapping("/admin/")
 public class CrudController {
     private final UserService userService;
+    private final RoleService roleService;
     private VisitorMessages messages;
 
     @Autowired
-    public CrudController(UserService userService) {
+    public CrudController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
+    }
+
+    @ModelAttribute("roles")
+    public List<Role> roleList() {
+        return roleService.getAllRoles();
     }
 
     /**
@@ -41,13 +52,25 @@ public class CrudController {
         return "/admin/index.html";
     }
 
-    /**
-     * Добавление нового пользователя
-     */
+    //    /**
+//     * Добавление нового пользователя
+//     */
+//    @PostMapping("/")
+//    public String addUser(@ModelAttribute User user) {
+//        // кидаем в сообщения результат операции
+//        messages.setResult(userService.addUser(user));
+//        return "redirect:/admin/?r=true";
+//    }
     @PostMapping("/")
-    public String addUser(@ModelAttribute User user) {
-        // кидаем в сообщения результат операции
-        messages.setResult(userService.addUser(user));
+    public String addUser2(HttpServletRequest request) {
+        User u = new User();
+        u.setName(request.getParameter("name"));
+        u.setSurname(request.getParameter("surname"));
+        u.setEmail(request.getParameter("email"));
+        u.setPassword(request.getParameter("password"));
+        u.setGoodAcc(true);
+        String roleString = request.getParameter("roles");
+        messages.setResult(userService.addUser(u, roleString));
         return "redirect:/admin/?r=true";
     }
 
@@ -73,13 +96,17 @@ public class CrudController {
      * Обработка формы на редактирование пользователя.
      */
     @PatchMapping("/")
-    public String updateUser(@ModelAttribute User user) {
+    public String updateUser(@ModelAttribute User tempUser) {
         // Ставим ранее сохраненный ИД
-        user.setId(messages.getId());
-        if (user.getId() == null) {
+        User user = userService.find(messages.getId());
+        if (user == null) {
             messages.setResult("Ошибка запроса, попробуй еще раз.");
             return "redirect:/admin/?r=true";
         }
+        user.setName(tempUser.getName());
+        user.setSurname(tempUser.getSurname());
+        user.setEmail(tempUser.getEmail());
+        user.setGoodAcc(tempUser.getGoodAcc());
         // Кидаем в сообщения результат операции ии возвращаемся на основную страницу
         messages.setResult(userService.updateUser(user));
         return "redirect:/admin/?r=true";
@@ -93,6 +120,7 @@ public class CrudController {
         messages.setResult(userService.deleteUser(id));
         return "redirect:/admin/?r=true";
     }
+
     /**
      * Очистка БД
      */
@@ -101,8 +129,10 @@ public class CrudController {
         messages.setResult(service.clearDB());
         return "redirect:/admin/?r=true";
     }
+
     @Autowired
     public void setMessages(VisitorMessages messages) {
         this.messages = messages;
     }
+
 }

@@ -54,31 +54,14 @@ public class LandingController {
     }
 
     /**
-     * @return Табличка стилей.
-     */
-    @GetMapping(value = "resources/crud.css", headers = "Accept=text/css")
-    public String css() {
-        return "resources/crud.css";
-    }
-
-    /**
-     * @return Табличка стилей.
-     */
-    @GetMapping(value = "resources/newcss.css", headers = "Accept=text/css")
-    public String cssNew() {
-        return "resources/newcss.css";
-    }
-
-
-    /**
      * favicon.ico просто раздражало постоянное 404
      */
-    @GetMapping(value = "/favicon.ico", produces = "image/png")
+    @GetMapping(value = "/favicon.ico", produces = "image/webp")
     @ResponseBody
     public void favicon(HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
         InputStream is = Files.newInputStream(new ClassPathResource(
-                "../view/resources/favicon.png").getFile().toPath());
+                "favicon.png").getFile().toPath());
         IOUtils.copy(is, response.getOutputStream());
     }
 }

@@ -57,7 +57,7 @@ table > tbody > tr > td > a, table > tbody > tr > td > a:hover {
     color: #f0faaa;
     margin-left: 10px;
     text-transform: uppercase;
-    border: 0px;
+    border: 0;
 }
 
 
@@ -87,4 +87,8 @@ a:hover {
 .red-text{
     color: red;
     font-size: large;
+}
+.add-line {
+    display: grid;
+    margin: 5px
 }

@@ -8,8 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -26,20 +25,21 @@ public class User implements UserDetails {
     String email;
     @Column(nullable = false)
     String password;
-    boolean isGoodAcc;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @Column(name = "isGoodAcc")
+    Boolean GoodAcc = null;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
-    Set<Role> roles;
+    List<Role> roles = new ArrayList<>();
 
 
-    public User(String name, String surname, String email, String password, boolean isGoodAcc, Set<Role> roles) {
+    public User(String name, String surname, String email, String password, boolean isGoodAcc, List<Role> roles) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
-        this.isGoodAcc = isGoodAcc;
+        this.GoodAcc = isGoodAcc;
         this.roles = roles;
     }
 
@@ -60,21 +60,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return isGoodAcc;
+        return GoodAcc;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isGoodAcc;
+        return GoodAcc;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isGoodAcc;
+        return GoodAcc;
     }
 
     @Override
     public boolean isEnabled() {
-        return isGoodAcc;
+        return GoodAcc;
     }
 }

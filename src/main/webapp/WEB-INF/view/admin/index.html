@@ -18,22 +18,35 @@
 </div>
 <div id='element_B' class='element_B'>
 
-    <form class="add-form" th:method="POST" th:action="@{/crud/}" th:object="${user}">
+    <form class="add-form" th:method="POST" th:action="@{/admin/}" th:object="${user}">
         <div class="add-line">
             <label>Имя:&nbsp;</label>
             <p><input type="text" th:field="*{name}"/>
+                <input hidden type="number" th:field="*{id}" th:value="null">
+                <input hidden type="checkbox" th:field="*{goodAcc}"/>
         </div>
         <div class="add-line">
             <label>Фамилия</label>
             <p><input type="text" th:field="*{surname}"/>
         </div>
         <div class="add-line">
-            <label>Возраст</label>
-            <p><input type="number" th:field="*{age}"/>
-        </div>
-        <div class="add-line">
             <label>Эл. почта*</label>
             <p><input type="email" th:field="*{email}" value="xx@x.x">
+        </div>
+        <div class="add-line">
+            <label>Пароль</label>
+            <p><input type="text" th:field="*{password}"/>
+        </div>
+        <div class="add-line">
+            <label>Роль</label>
+            <select th:field="*{roles}">
+                <option th:each="role : ${roles}"
+                        th:value="${role}"
+                        th:text="${role.role}">wireframe
+                </option>
+            </select>
+
+
         </div>
         <div class="add-line">
             <button class="add-button" type="submit">Создать Пользователя</button>
@@ -48,7 +61,7 @@
             <th>ИД</th>
             <th>Имя</th>
             <th>Фамилия</th>
-            <th>Возраст</th>
+            <th>Статус</th>
             <th>Эл. почта</th>
             <th colspan="2">Операции</th>
         </tr>
@@ -58,15 +71,15 @@
             <td th:text="${cur_user.id}"></td>
             <td th:text="${cur_user.name}"></td>
             <td th:text="${cur_user.surname}"></td>
-            <td th:text="${cur_user.age}"></td>
+            <td th:text="(${cur_user.goodAcc == true} ? 'действующий' : 'забанен')"></td>
             <td th:text="${cur_user.email}"></td>
             <td>
-                <form action="#" th:method="GET" th:action="@{/crud/edit/{id}(id = ${cur_user.id})}">
+                <form action="#" th:method="GET" th:action="@{/admin/edit/{id}(id = ${cur_user.id})}">
                     <button type="submit">Редактировать</button>
                 </form>
             </td>
             <td>
-                <form action="#" th:method="DELETE" th:action="@{/crud/{id}(id = ${cur_user.id})}">
+                <form action="#" th:method="DELETE" th:action="@{/admin/{id}(id = ${cur_user.id})}">
                     <button type="submit">Удалить</button>
                 </form>
             </td>
