@@ -1,17 +1,13 @@
 package io.github.archmagefil.crudwebapp.util;
 
-import io.github.archmagefil.crudwebapp.dao.DaoRole;
-import io.github.archmagefil.crudwebapp.dao.DaoUser;
-import io.github.archmagefil.crudwebapp.model.Role;
 import io.github.archmagefil.crudwebapp.model.User;
 import lombok.Getter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

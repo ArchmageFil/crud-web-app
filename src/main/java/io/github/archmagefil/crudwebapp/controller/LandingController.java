@@ -8,9 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -49,6 +47,11 @@ public class LandingController {
         return "login.html";
     }
 
+    /**
+     * @param principal Текущий пользователь
+     * @param model     Модель для th
+     * @return Страничка зарегистрированного пользователя.
+     */
     @GetMapping("/user")
     public String userPage(Principal principal, Model model) {
         model.addAttribute("user", service.find(principal.getName()));

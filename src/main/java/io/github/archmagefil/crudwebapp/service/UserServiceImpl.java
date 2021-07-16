@@ -31,7 +31,9 @@ public class UserServiceImpl implements UserService {
         if (dao.find(user.getEmail()) != null) {
             return util.getWords().getProperty("duplicate_email");
         }
+        // Криптуем пароль нового юзера.
         user.setPassword(bCrypt.encode(user.getPassword()));
+        // В контроллере выкидывает deattached.
         if (roleString.contains("ROLE_admin")) {
             user.getRoles().addAll(roleService.getAllRoles());
         } else {
@@ -58,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String deleteUser(long id) {
         User user = find(id);
-        if ( user == null) {
+        if (user == null) {
             return util.getWords().getProperty("no_id_in_db");
         }
         user.setRoles(null);

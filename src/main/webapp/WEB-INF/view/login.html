@@ -9,9 +9,8 @@
 
 <p>
 <div th:if="${bad_credentials} != null">
-<span class="red-text" th:text="'Неверный логин'"></span>
+    <span class="red-text" th:text="'Неверный логин'"></span>
 </div>
-</p>
 
 <form th:method="POST" th:action="@{/login}">
     <fieldset>
@@ -20,15 +19,13 @@
         <p align="center">Пароль</p>
         <input type="password" name="j_password" value="">
         <p></p>
-        <input class="button-submit" type="submit" value="Авторизоваться" />
+        <input class="button-submit" type="submit" value="Авторизоваться"/>
     </fieldset>
 </form>
 
 <p>
     <a href="home.html" th:href="@{/}">На главную</a>
 </p>
-
-</body>
 
 </body>
 </html>

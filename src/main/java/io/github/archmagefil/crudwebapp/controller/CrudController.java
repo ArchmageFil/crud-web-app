@@ -40,8 +40,6 @@ public class CrudController {
     @GetMapping("/")
     public String listUsers(@RequestParam(value = "r", defaultValue = "false")
                                     Boolean isRedirect, Model model, Principal principal) {
-
-
         model.addAttribute("user_login", principal.getName());
         model.addAttribute("user", new User());
         // Если в запросе пришла инфа о наличии доп. сообщениий - добавить в модель
@@ -52,17 +50,11 @@ public class CrudController {
         return "/admin/index.html";
     }
 
-    //    /**
-//     * Добавление нового пользователя
-//     */
-//    @PostMapping("/")
-//    public String addUser(@ModelAttribute User user) {
-//        // кидаем в сообщения результат операции
-//        messages.setResult(userService.addUser(user));
-//        return "redirect:/admin/?r=true";
-//    }
+    /**
+     * Добавление нового пользователя
+     */
     @PostMapping("/")
-    public String addUser2(HttpServletRequest request) {
+    public String addUser(HttpServletRequest request) {
         User u = new User();
         u.setName(request.getParameter("name"));
         u.setSurname(request.getParameter("surname"));

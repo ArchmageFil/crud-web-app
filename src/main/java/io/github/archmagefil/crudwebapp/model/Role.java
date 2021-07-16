@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
