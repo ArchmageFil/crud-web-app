@@ -1,12 +1,13 @@
 package io.github.archmagefil.crudwebapp.config;
 
-import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.Filter;
 
 public class WebXml extends AbstractAnnotationConfigDispatcherServletInitializer {
+    public static final String CHARACTER_ENCODING = "UTF-8";
+
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return null;
@@ -23,14 +24,10 @@ public class WebXml extends AbstractAnnotationConfigDispatcherServletInitializer
     }
 
     @Override
-    public void onStartup(ServletContext aServletContext) throws ServletException {
-        super.onStartup(aServletContext);
-        registerHiddenFieldFilter(aServletContext);
-    }
-
-    private void registerHiddenFieldFilter(ServletContext aContext) {
-        aContext.addFilter("hiddenHttpMethodFilter",
-                new HiddenHttpMethodFilter()).addMappingForUrlPatterns(
-                null, true, "/*");
+    protected Filter[] getServletFilters() {
+        final CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+        encodingFilter.setEncoding(CHARACTER_ENCODING);
+        encodingFilter.setForceEncoding(true);
+        return new Filter[]{encodingFilter};
     }
 }
