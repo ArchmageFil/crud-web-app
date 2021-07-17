@@ -1,6 +1,7 @@
 package io.github.archmagefil.crudwebapp.config;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
@@ -28,6 +29,7 @@ public class WebXml extends AbstractAnnotationConfigDispatcherServletInitializer
         final CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
         encodingFilter.setEncoding(CHARACTER_ENCODING);
         encodingFilter.setForceEncoding(true);
-        return new Filter[]{encodingFilter};
+        final HiddenHttpMethodFilter hiddenF = new HiddenHttpMethodFilter();
+        return new Filter[]{encodingFilter, hiddenF};
     }
 }
