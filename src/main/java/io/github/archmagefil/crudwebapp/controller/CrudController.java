@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -51,6 +50,7 @@ public class CrudController {
 
     /**
      * Создаание нового пользователя
+     *
      * @param tempUser ДТОшка для подготовки к созданию сущности
      * @return возвращает на основную админку.
      */
