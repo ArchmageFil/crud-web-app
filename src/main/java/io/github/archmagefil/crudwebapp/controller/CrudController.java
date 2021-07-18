@@ -84,17 +84,13 @@ public class CrudController {
     @PatchMapping("/")
     public String updateUser(@ModelAttribute User tempUser) {
         // Ставим ранее сохраненный ИД
-        User user = userService.find(messages.getId());
-        if (user == null) {
+        tempUser.setId(messages.getId());
+        if (tempUser.getId() == null) {
             messages.setResult("Ошибка запроса, попробуй еще раз.");
             return "redirect:/admin/?r=true";
         }
-        user.setName(tempUser.getName());
-        user.setSurname(tempUser.getSurname());
-        user.setEmail(tempUser.getEmail());
-        user.setGoodAcc(tempUser.getGoodAcc());
-        // Кидаем в сообщения результат операции ии возвращаемся на основную страницу
-        messages.setResult(userService.updateUser(user));
+        // Кидаем в сообщения результат операции и возвращаемся на основную страницу
+        messages.setResult(userService.updateUser(tempUser));
         return "redirect:/admin/?r=true";
     }
 

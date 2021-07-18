@@ -30,14 +30,17 @@ public class UserTableUtil {
     }
 
     public boolean isInvalidUser(UserDto user) {
-        if (isInvalidEmail(user.getEmail()) || user.getPassword() == null) {
+        if (isInvalidEmail(user.getEmail())) {
             message = words.getProperty("wrong_email");
+            return true;
+        } else if (user.getPassword() == null){
+            message = words.getProperty("password_empty");
             return true;
         }
         return false;
     }
 
-    boolean isInvalidEmail(String email) {
+    public boolean isInvalidEmail(String email) {
         if (email == null) {
             return true;
         }

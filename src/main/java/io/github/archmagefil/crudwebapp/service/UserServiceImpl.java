@@ -34,8 +34,8 @@ public class UserServiceImpl implements UserService {
         }
         // Криптуем пароль нового юзера.
         tempUser.setPassword(bCrypt.encode(tempUser.getPassword()));
-        // Если админ - все разрешения, если нет - только заявленное.
-        // Но так как есть только еще 1, то упростим
+        // Если админ - одни разрешения, если юзер - только другие.
+        // Но так как есть только 2, то упростим
         if (tempUser.getRole().toLowerCase().contains("role_admin")) {
             tempUser.setRoles(roleService.getAllRoles());
         } else {
@@ -50,11 +50,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String updateUser(User user) {
-        if (null == find(user.getId())) {
+    public String updateUser(User tempUser) {
+        // Проверяем синтаксис мыла
+        tempUser.setEmail(tempUser.getEmail().trim());
+        if (util.isInvalidEmail(tempUser.getEmail())) {
+            return util.getWords().getProperty("wrong_email");
+        }
+        //Не успели ли удалить пользователя.
+        User user = find(tempUser.getId());
+        if (null == user) {
             return util.getWords().getProperty("no_id_in_db");
         }
-        System.out.println(user);
+        // Проверяем почту на дублирование
+        if (dao.find(tempUser.getEmail()) != null &&
+                !(dao.find(tempUser.getEmail()).getId().equals(user.getId()))) {
+            return util.getWords().getProperty("duplicate_email");
+        }
+        // Обновляем
+        user.setName(tempUser.getName().trim());
+        user.setSurname(tempUser.getSurname().trim());
+        user.setEmail(tempUser.getEmail());
+        user.setGoodAcc(tempUser.getGoodAcc());
         dao.update(user);
         return util.getWords().getProperty("updated");
     }
