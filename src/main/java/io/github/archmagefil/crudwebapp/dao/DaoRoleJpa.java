@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class DaoRoleJpa implements DaoRole {
@@ -14,8 +16,15 @@ public class DaoRoleJpa implements DaoRole {
 
 
     @Override
-    public Role find(Long id) {
-        return em.find(Role.class, id);
+    public Optional<Role> findByName(String role) {
+        Query query = em.createQuery("SELECT r from Role r " +
+                "WHERE r.role = :role", Role.class);
+        query.setParameter("role", role);
+        try {
+            return Optional.of((Role) query.getSingleResult());
+        } catch (javax.persistence.NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

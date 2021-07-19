@@ -3,6 +3,7 @@ package io.github.archmagefil.crudwebapp.dao;
 import io.github.archmagefil.crudwebapp.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DaoUser {
 
@@ -10,13 +11,13 @@ public interface DaoUser {
 
     void update(User user);
 
-    void delete(long id);
+    void deleteById(long id);
 
     List<User> getAll();
 
-    User find(String email);
+    Optional<User> findByEmail(String email);
 
-    User find(long id);
+    User findById(long id);
 
     String clearDB();
 }

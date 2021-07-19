@@ -5,6 +5,7 @@ import io.github.archmagefil.crudwebapp.model.User;
 import io.github.archmagefil.crudwebapp.model.UserDto;
 import io.github.archmagefil.crudwebapp.util.UserTableUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,19 +30,15 @@ public class UserServiceImpl implements UserService {
         if (util.isInvalidUser(tempUser)) {
             return util.getMessage();
         }
-        if (dao.find(tempUser.getEmail()) != null) {
+        if (dao.findByEmail(tempUser.getEmail()).isPresent()) {
             return util.getWords().getProperty("duplicate_email");
         }
         // Криптуем пароль нового юзера.
         tempUser.setPassword(bCrypt.encode(tempUser.getPassword()));
-        // Если админ - одни разрешения, если юзер - только другие.
-        // Но так как есть только 2, то упростим
-        if (tempUser.getRole().toLowerCase().contains("role_admin")) {
-            tempUser.setRoles(roleService.getAllRoles());
-        } else {
-            tempUser.getRoles().add(roleService.getAllRoles().get(1));
-        }
-
+        // Назначем роль и добвляем.
+        tempUser.getRoles().add(roleService.findByName(tempUser.getRole())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        util.getWords().getProperty("wrong_role") + tempUser.getRole())));
         User user = tempUser.createUser();
         dao.add(user);
         return String.format(util.getWords().getProperty("user_added"),
@@ -61,9 +58,10 @@ public class UserServiceImpl implements UserService {
         if (null == user) {
             return util.getWords().getProperty("no_id_in_db");
         }
-        // Проверяем почту на дублирование
-        if (dao.find(tempUser.getEmail()) != null &&
-                !(dao.find(tempUser.getEmail()).getId().equals(user.getId()))) {
+        // Проверяем почту на дублирование, с Optional логика сразу становится "понятной"
+        if (dao.findByEmail(tempUser.getEmail())
+                .filter(x -> !(x.getId().equals(user.getId())))
+                .isPresent()) {
             return util.getWords().getProperty("duplicate_email");
         }
         // Обновляем
@@ -83,18 +81,20 @@ public class UserServiceImpl implements UserService {
             return util.getWords().getProperty("no_id_in_db");
         }
         user.setRoles(null);
-        dao.delete(id);
+        dao.deleteById(id);
         return util.getWords().getProperty("deleted");
     }
 
     @Override
     public User find(long id) {
-        return dao.find(id);
+        return dao.findById(id);
     }
 
     @Override
-    public User find(String email) {
-        return dao.find(email);
+    public User findByUsername(String email) {
+        return (dao.findByEmail(email))
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        email + util.getWords().getProperty("no_email_in_db")));
     }
 
     @Transactional
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Autowired
-    public void setbCrypt(PasswordEncoder bCrypt) {
+    public void setBCrypt(PasswordEncoder bCrypt) {
         this.bCrypt = bCrypt;
     }
 }

@@ -54,7 +54,7 @@ public class LandingController {
      */
     @GetMapping("/user")
     public String userPage(Principal principal, Model model) {
-        model.addAttribute("user", service.find(principal.getName()));
+        model.addAttribute("user", service.findByUsername(principal.getName()));
         return "user.html";
     }
 

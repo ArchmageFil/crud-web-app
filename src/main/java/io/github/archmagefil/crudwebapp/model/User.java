@@ -1,9 +1,7 @@
 package io.github.archmagefil.crudwebapp.model;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,26 +12,25 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String name;
-    String surname;
+    private Long id;
+    private String name;
+    private String surname;
     @Column(nullable = false, unique = true)
-    String email;
+    private String email;
     @Column(nullable = false)
-    String password;
+    private String password;
     @Column(name = "isGoodAcc")
-    Boolean GoodAcc = null;
+    private Boolean GoodAcc = null;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
-    List<Role> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 
 
     public User(String name, String surname, String email, String password, boolean isGoodAcc, List<Role> roles) {

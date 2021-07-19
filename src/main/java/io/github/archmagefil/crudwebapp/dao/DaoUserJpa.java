@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class DaoUserJpa implements DaoUser {
@@ -24,7 +25,7 @@ public class DaoUserJpa implements DaoUser {
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteById(long id) {
         em.remove(em.getReference(User.class, id));
     }
 
@@ -35,19 +36,19 @@ public class DaoUserJpa implements DaoUser {
     }
 
     @Override
-    public User find(long id) {
+    public User findById(long id) {
         return em.find(User.class, id);
     }
 
     @Override
-    public User find(String email) {
+    public Optional<User> findByEmail(String email) {
         Query query = em.createQuery("SELECT u from User u " +
                 "WHERE u.email = :email", User.class);
         query.setParameter("email", email);
         try {
-            return (User) query.getSingleResult();
+            return Optional.of((User) query.getSingleResult());
         } catch (javax.persistence.NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
