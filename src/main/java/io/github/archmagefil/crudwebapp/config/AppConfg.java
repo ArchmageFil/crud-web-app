@@ -1,9 +1,9 @@
 package io.github.archmagefil.crudwebapp.config;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -18,9 +18,9 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 @EnableWebMvc
 @ComponentScan("io.github.archmagefil.crudwebapp")
 public class AppConfg implements WebMvcConfigurer {
-    private final ApplicationContext context;
+    private final AnnotationConfigWebApplicationContext context;
 
-    public AppConfg(ApplicationContext context) {
+    public AppConfg(AnnotationConfigWebApplicationContext context) {
         this.context = context;
     }
 
@@ -54,8 +54,9 @@ public class AppConfg implements WebMvcConfigurer {
         resolver.setCharacterEncoding("UTF-8");
         registry.viewResolver(resolver);
     }
+
     @Bean
-    public SpringSecurityDialect secDialect(){
+    public SpringSecurityDialect secDialect() {
         return new SpringSecurityDialect();
     }
 }
