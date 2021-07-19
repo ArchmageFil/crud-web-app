@@ -1,11 +1,12 @@
 package io.github.archmagefil.crudwebapp.dao;
 
 import io.github.archmagefil.crudwebapp.model.User;
+import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,11 +43,14 @@ public class DaoUserJpa implements DaoUser {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Query query = em.createQuery("SELECT u from User u " +
-                "WHERE u.email = :email", User.class);
+        TypedQuery<User> query = em.createQuery(
+                "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles " +
+                        "WHERE u.email = :email", User.class);
+        query.setHint(QueryHints.PASS_DISTINCT_THROUGH, false);
         query.setParameter("email", email);
+
         try {
-            return Optional.of((User) query.getSingleResult());
+            return Optional.of(query.getSingleResult());
         } catch (javax.persistence.NoResultException e) {
             return Optional.empty();
         }
