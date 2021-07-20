@@ -1,7 +1,6 @@
 package io.github.archmagefil.crudwebapp.dao;
 
 import io.github.archmagefil.crudwebapp.model.User;
-import org.hibernate.annotations.QueryHints;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -44,9 +43,8 @@ public class DaoUserJpa implements DaoUser {
     @Override
     public Optional<User> findByEmail(String email) {
         TypedQuery<User> query = em.createQuery(
-                "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles " +
+                "SELECT u FROM User u LEFT JOIN FETCH u.roles " +
                         "WHERE u.email = :email", User.class);
-        query.setHint(QueryHints.PASS_DISTINCT_THROUGH, false);
         query.setParameter("email", email);
 
         try {
